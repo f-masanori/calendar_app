@@ -23,7 +23,7 @@ func (repo *UserRepository) FindAll() (entities.Users, error) {
 	defer rows.Close() // make sure rows is closed when the handler exits
 	defer fmt.Println("どこで終了かの確認")
 	type users_table struct {
-		Id         uint32 `db:"id"`
+		Id         int    `db:"id"`
 		Name       string `db:"name"`
 		Created_at string `db:"created_at"`
 		Updated_at string `db:"updated_at"`
@@ -44,6 +44,9 @@ func (repo *UserRepository) FindAll() (entities.Users, error) {
 	return users, nil
 }
 
+// func (repo *UserRepository) SaveUser(entities.Users, error){
+
+// }
 // func (repo *UserRepository) Find(id int) (entities.User, error) {
 // 	var user entities.User
 

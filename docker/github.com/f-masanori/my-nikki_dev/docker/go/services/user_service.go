@@ -1,11 +1,14 @@
 package services
 
 import (
+	"fmt"
+
 	"github.com/f-masanori/my-nikki_dev/docker/go/entities"
 )
 
 type UserRepository interface {
 	FindAll() (entities.Users, error)
+	// SaveUser(string)
 	// Find(int) (entities.User, error)
 	// Save(*entities.User) (entities.User, error)
 	// Update(int, *entities.User) (entities.User, error)
@@ -19,4 +22,8 @@ type UserService struct {
 func (s *UserService) GetAll() (entities.Users, error) {
 	users, err := s.UserRepository.FindAll()
 	return users, err
+}
+func (s *UserService) StoreNewUser() {
+	fmt.Println("StoreNewUser")
+	// s.UserRepository.SaveUser("testets")
 }

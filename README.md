@@ -77,4 +77,7 @@
 - $ docker-compose build
 - $ docker-compose up 
 
+#### アーキテクチャメモ
+- infrastructure/router で ルーティング
+- infrastructure/router の　userHandler := handlers.NewUserHandler(database.NewSqlHandler())　でuserHandlerの実体作成.userHandlerをレシーバーとするメソッドがそれぞれのハンドラー(コントローラ)
 

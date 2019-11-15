@@ -1,10 +1,7 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/f-masanori/my-nikki_dev/docker/go/conf"
-	"github.com/f-masanori/my-nikki_dev/docker/go/infrastructure/database"
 	"github.com/f-masanori/my-nikki_dev/docker/go/infrastructure/router"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -16,8 +13,8 @@ func init() {
 }
 func main() {
 	router.Init()
-	defer database.CloseConn()
-	defer fmt.Println("deferrr")
+	// defer database.CloseConn()
+	// defer fmt.Println("deferrr")
 }
 
 // func addname(w http.ResponseWriter, r *http.Request) {

@@ -14,8 +14,10 @@ func Init() {
 	router := mux.NewRouter()
 	userHandler := handlers.NewUserHandler(database.NewSqlHandler())
 	router.HandleFunc("/", userHandler.Index).Methods("GET")
+	router.HandleFunc("/test", userHandler.Test).Methods("GET")
+
 	// router.HandleFunc("/users", showusers).Methods("GET")
-	router.HandleFunc("/user", userHandler.CreateUser).Methods("POST")
+	router.HandleFunc("/user", userHandler.NewUser).Methods("POST")
 
 	fmt.Println("Server Start...")
 	log.Fatal(http.ListenAndServe(":8080", router))
