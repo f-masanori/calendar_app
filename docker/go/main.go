@@ -9,7 +9,7 @@ import (
 // 初期化処理
 func init() {
 	// 設定ファイル読み取り
-	conf.ReadConf()
+	conf.Init()
 }
 func main() {
 	router.Init()

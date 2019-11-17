@@ -21,22 +21,22 @@ func NewSqlHandler() *SqlHandler {
 	//configからDBの読み取り
 	connectionCmd := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s",
-		conf.C.Database.User,
-		conf.C.Database.Password,
-		conf.C.Database.Host,
-		conf.C.Database.Port,
-		conf.C.Database.Dbname,
+		conf.Database.User,
+		conf.Database.Password,
+		conf.Database.Host,
+		conf.Database.Port,
+		conf.Database.Dbname,
 	)
 	// // DB の接続
 	// 	user:password@tcp(container-name:port)/dbname ※mysql はデフォルトで用意されているDB
 	// 	"root:mysql@tcp(mysql_container:3306)/app"
 
-	Db, ConnectionError = sql.Open(conf.C.Database.Drivername, connectionCmd)
+	Db, ConnectionError = sql.Open(conf.Database.Drivername, connectionCmd)
 	fmt.Println("DB-information")
-	fmt.Println("drivername: " + conf.C.Database.Drivername)
-	fmt.Println("host: " + conf.C.Database.Host)
-	fmt.Println("port: " + conf.C.Database.Port)
-	fmt.Println("dbname: " + conf.C.Database.Dbname)
+	fmt.Println("drivername: " + conf.Database.Drivername)
+	fmt.Println("host: " + conf.Database.Host)
+	fmt.Println("port: " + conf.Database.Port)
+	fmt.Println("dbname: " + conf.Database.Dbname)
 	fmt.Println("______________")
 	if ConnectionError != nil {
 		log.Fatal("error connecting to database: ", ConnectionError)
@@ -53,19 +53,19 @@ func Connect() *sql.DB {
 	//configからDBの読み取り
 	connectionCmd := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s",
-		conf.C.Database.User,
-		conf.C.Database.Password,
-		conf.C.Database.Host,
-		conf.C.Database.Port,
-		conf.C.Database.Dbname,
+		conf.Database.User,
+		conf.Database.Password,
+		conf.Database.Host,
+		conf.Database.Port,
+		conf.Database.Dbname,
 	)
 
-	Db, ConnectionError = sql.Open(conf.C.Database.Drivername, connectionCmd)
+	Db, ConnectionError = sql.Open(conf.Database.Drivername, connectionCmd)
 	fmt.Println("DB-information")
-	fmt.Println("drivername: " + conf.C.Database.Drivername)
-	fmt.Println("host: " + conf.C.Database.Host)
-	fmt.Println("port: " + conf.C.Database.Port)
-	fmt.Println("dbname: " + conf.C.Database.Dbname)
+	fmt.Println("drivername: " + conf.Database.Drivername)
+	fmt.Println("host: " + conf.Database.Host)
+	fmt.Println("port: " + conf.Database.Port)
+	fmt.Println("dbname: " + conf.Database.Dbname)
 	fmt.Println("______________")
 	if ConnectionError != nil {
 		log.Fatal("error connecting to database: ", ConnectionError)

@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/f-masanori/my-nikki_dev/docker/go/entities"
 	"github.com/f-masanori/my-nikki_dev/docker/go/infrastructure/database"
 	sqlcmd "github.com/f-masanori/my-nikki_dev/docker/go/interfaces/database"
 	"github.com/f-masanori/my-nikki_dev/docker/go/services"
@@ -61,6 +62,7 @@ func (h *UserHandler) NewUser(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println(request)
 	h.Service.StoreNewUser()
+	fmt.Println(entities.Platform_map["ios"])
 	// fmt.Println(r.Body)
 	// var req request
 

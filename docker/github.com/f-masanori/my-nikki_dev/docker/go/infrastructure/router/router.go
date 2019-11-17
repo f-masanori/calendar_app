@@ -12,13 +12,15 @@ import (
 
 func Init() {
 	router := mux.NewRouter()
-	userHandler := handlers.NewUserHandler(database.NewSqlHandler())
+	DBhandler := database.NewSqlHandler()
+	userHandler := handlers.NewUserHandler(DBhandler)
+	platformHandler := handlers.NewPlatformHandler(DBhandler)
 	router.HandleFunc("/", userHandler.Index).Methods("GET")
 	router.HandleFunc("/test", userHandler.Test).Methods("GET")
 
 	// router.HandleFunc("/users", showusers).Methods("GET")
 	router.HandleFunc("/user", userHandler.NewUser).Methods("POST")
-
+	router.HandleFunc("/initalize", platformHandler.Index).Methods("POST")
 	fmt.Println("Server Start...")
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
