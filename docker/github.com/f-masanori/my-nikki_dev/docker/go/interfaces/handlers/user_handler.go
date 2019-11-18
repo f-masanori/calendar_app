@@ -29,7 +29,7 @@ func NewUserHandler(sqlHandler *database.SqlHandler) *UserHandler {
 func (h *UserHandler) Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("handler  Index")
 	// 抽象的にGetALL
-	users, error := h.Service.GetAll()
+	users, error := h.Service.GetAll() //GetAllの返り値はエンティティのusersでいい？
 
 	fmt.Println(users)
 	if error != nil {

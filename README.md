@@ -81,3 +81,10 @@
 - infrastructure/router で ルーティング
 - infrastructure/router の　userHandler := handlers.NewUserHandler(database.NewSqlHandler())　でuserHandlerの実体作成.userHandlerをレシーバーとするメソッドがそれぞれのハンドラー(コントローラ)
 
+
+#### メモ
+- gitでcommit メッセージを間違えた時
+  - git commit --amend -m "書き直しメッセージ"
+  - これで直前のcommitしたメッセージを変更できる
+  - 参考(https://www.granfairs.com/blog/staff/git-commit-fix)
+
