@@ -17,7 +17,6 @@ type SqlHandler struct {
 }
 
 func NewSqlHandler() *SqlHandler {
-
 	//configからDBの読み取り
 	connectionCmd := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s",
@@ -41,7 +40,7 @@ func NewSqlHandler() *SqlHandler {
 	if ConnectionError != nil {
 		log.Fatal("error connecting to database: ", ConnectionError)
 	}
-
+	
 	sqlHandler := new(SqlHandler)
 	sqlHandler.DB = Db
 

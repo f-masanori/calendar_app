@@ -61,7 +61,7 @@ func (h *UserHandler) NewUser(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 	log.Println(request)
-	h.Service.StoreNewUser()
+	h.Service.StoreNewUser(request.Name)
 	fmt.Println(entities.Platform_map["ios"])
 	// fmt.Println(r.Body)
 	// var req request
