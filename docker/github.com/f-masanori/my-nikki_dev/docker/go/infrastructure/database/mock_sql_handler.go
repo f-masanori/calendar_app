@@ -14,14 +14,17 @@ func NewMockDbHandler() *SqlHandler {
 	sqlHandler := new(SqlHandler)
 	sqlHandler.DB = mockDb
 
-	// rows := sqlmock.NewRows([]string{"id", "title"}).
-	// 	AddRow("1", "one").
-	// 	AddRow("2", "two")
+	rows := sqlmock.NewRows([]string{"id", "title"}).
+		AddRow("1", "one").
+		AddRow("2", "two")
+	fmt.Println(rows)
 
-	prep := mock.ExpectPrepare("^INSERT INTO articles*")
-    prep.ExpectExec().
-        WithArgs("test", "test").
-        WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectQuery(`SELECT * from`).WillReturnRows(rows)
+
+	// prep := mock.ExpectPrepare("^INSERT INTO articles*")
+    // prep.ExpectQuery().
+    //     WithArgs({Name: Ordinal:1 Value:test}, "test").
+    //     WillReturnRows(rows)
 	// mock.ExpectExec("UPDATE products").WillReturnResult(sqlmock.NewResult(1, 1))
 	// mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "students"`)).
 	// 	WillReturnRows(rows)
