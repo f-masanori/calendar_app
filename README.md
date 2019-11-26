@@ -7,21 +7,16 @@
 ## 実行
 - /mynikki_dev/docker 内で docker-compose up
 - ポート8080
-## API
-- / (GET)
-  
-    - DB情報を表示
-    
+## API 
 - /users (GET)
-  
-    - usersテーブルから全データを持ってくる(json)
+    - req : なし
+    - res : usersテーブルから全データを持ってくる(json)
     
 - /app (POST)
-    - userdテーブルのnameを追加
-    
-    - 送信方法はjsonでキーは "name"
-    
-    - 例 {"name":"nmasanori"}
+    - userテーブルのnameを追加
+    - req : json("name")
+      - 例 {"name":"nmasanori"}
+    - res : json("uuid","name")
     
 ## DB命名規則
 
@@ -34,7 +29,9 @@
 
 ##### 動いてるコンテナへの入り方
 - $ docker exec -i -t コンテナ名 bash
-- run との違いは？
+##### 動いているコンテナ内でのコマンドの実行
+- $ docker exec -i  63b7de01ee21 /bin/bash -c "cd ./dbseedgo && ls"
+  - このようにすれば、コンテナ内のどこのディレクトリ内でもコマンドの実行ができる
 #### migrationツール
 - sql-migrateを使用
 
@@ -52,7 +49,7 @@
     - migrationファイルの新規作成
     - $ sql-migrate new create_テーブル名(複数形);
       - ex) $ sql-migrate new create_users;
-      - docker/go/migrations に  作成日付時間-create_users.sql という雛形sqlファイルが作成されるためその中に書き込む
+      - docker/go/migrations に  作成日付時間-create_users.sql という雛形sqlファイルが作成されるためその中SQL文を書き込む
     - migrationの実行
       - $ sql-migrate up
     - migration ドライラン

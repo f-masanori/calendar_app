@@ -35,12 +35,12 @@ func Init() {
 	userHandler := handlers.NewUserHandler(DBhandler)
 	platformHandler := handlers.NewPlatformHandler(DBhandler)
 
-	router.HandleFunc("/", userHandler.Index).Methods("GET")
+	router.HandleFunc("/users", userHandler.Index).Methods("GET")
 	router.HandleFunc("/test", userHandler.Test).Methods("GET")
 	router.HandleFunc("/testauth", Authentication.AuthMiddleware(userHandler.Index)).Methods("GET")
 	router.HandleFunc("/user", userHandler.NewUser).Methods("POST")
 	router.HandleFunc("/initalize", platformHandler.Index).Methods("POST")
-
+		
 	fmt.Println("Server Start...")
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

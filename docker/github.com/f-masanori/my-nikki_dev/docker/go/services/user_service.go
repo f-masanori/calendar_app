@@ -23,7 +23,7 @@ func (s *UserService) GetAll() (entities.Users, error) {
 	users, err := s.UserRepository.FindAll()
 	return users, err
 }
-func (s *UserService) StoreNewUser(name string) {
+func (s *UserService) StoreNewUser(name string) (entities.User,error){
 	fmt.Println("StoreNewUser")
 	user, err := s.UserRepository.CreateUser(name)
 	if err != nil{
@@ -31,4 +31,5 @@ func (s *UserService) StoreNewUser(name string) {
 	}else{
 		fmt.Println("Created New user id="+strconv.Itoa(user.Id)+" name="+user.Name)
 	}
+	return user,err
 }
