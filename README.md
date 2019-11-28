@@ -67,9 +67,11 @@
 - $ mysql -h db -P 3306 -u root -p 違うコンテナからの入りかた
 
 #### 設定
-- mysql_docker/mysql/initdb 内のsqlファイルを初回のみ実行
-- ↑migrationツールを入れるならば必要ない。
-- config.ymlにDBなどの設定を記入(追加したときはconfig.yml,conf.goにそれぞれ追加)
+- ~~mysql_docker/mysql/initdb 内のsqlファイルを初回のみ実行~~
+  - ↑migrationツールを入れるならば必要ない。
+- ~~config.ymlにDBなどの設定を記入(追加したときはconfig.yml,conf.goにそれぞれ追加)~~
+  - ↑構造体に直接記入
+
 ##### 二つの違いは？
 - $ docker-compose build
 - $ docker-compose up 
@@ -80,10 +82,12 @@
 
 #### mockDBについて
 - go-sqlmock
+  - ↑ネット上に参考が少ないため使用しない
 - https://qiita.com/gold-kou/items/cb174690397f651e2d7f
 #### メモ
 - gitでcommit メッセージを間違えた時
   - git commit --amend -m "書き直しメッセージ"
   - これで直前のcommitしたメッセージを変更できる
   - 参考(https://www.granfairs.com/blog/staff/git-commit-fix)
+- go modはいづれ導入
 
