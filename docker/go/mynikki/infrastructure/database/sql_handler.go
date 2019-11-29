@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/f-masanori/my-nikki_dev/docker/go/conf"
+	"go_docker/mynikki/conf"
 	_ "github.com/go-sql-driver/mysql"
 )
 

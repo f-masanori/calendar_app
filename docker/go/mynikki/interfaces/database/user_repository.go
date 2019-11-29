@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/f-masanori/my-nikki_dev/docker/go/entities"
-	"github.com/f-masanori/my-nikki_dev/docker/go/infrastructure/database"
+	"go_docker/mynikki/entities"
+	"go_docker/mynikki/infrastructure/database"
 )
 
 type UserRepository struct {
@@ -44,25 +44,26 @@ func (repo *UserRepository) FindAll() (entities.Users, error) {
 	return users, nil
 }
 
-func (repo *UserRepository) CreateUser(name string) (entities.User, error){
+func (repo *UserRepository) CreateUser(name string) (entities.User, error) {
 	var user entities.User
 	statement := "INSERT INTO users(name) VALUES(?)"
-	stmtInsert ,err := repo.SqlHandler.DB.Prepare(statement)
-	if err != nil{
+	stmtInsert, err := repo.SqlHandler.DB.Prepare(statement)
+	if err != nil {
 		fmt.Println("error1")
-		return user,err
+		return user, err
 	}
 	defer stmtInsert.Close()
 	result, err := stmtInsert.Exec(name)
-	if err != nil{
+	if err != nil {
 		fmt.Println("error2")
-		return user,err
+		return user, err
 	}
 	lastInsertID, err := result.LastInsertId()
-	user.Id= int(lastInsertID)
-	user.Name=name
-	return user,nil
+	user.Id = int(lastInsertID)
+	user.Name = name
+	return user, nil
 }
+
 // func (repo *UserRepository) Find(id int) (entities.User, error) {
 // 	var user entities.User
 
@@ -72,8 +73,8 @@ func (repo *UserRepository) CreateUser(name string) (entities.User, error){
 
 // 	return user, nil
 // }
-func NewUserRepository(sqlHandler *database.SqlHandler) *UserRepository{
+func NewUserRepository(sqlHandler *database.SqlHandler) *UserRepository {
 	return &UserRepository{
-		SqlHandler:sqlHandler,
+		SqlHandler: sqlHandler,
 	}
 }

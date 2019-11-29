@@ -20,7 +20,7 @@ services:
     container_name: go_docker
     volumes:
         - ./go:/go/src/go_docker
-        - ./github.com:/go/src/github.com
+        # - ./github.com:/go/src/github.com
     depends_on:
         - db
 

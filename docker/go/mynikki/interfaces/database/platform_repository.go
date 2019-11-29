@@ -1,8 +1,8 @@
 package database
 
 import (
-	"github.com/f-masanori/my-nikki_dev/docker/go/entities"
-	"github.com/f-masanori/my-nikki_dev/docker/go/infrastructure/database"
+	"go_docker/mynikki/entities"
+	"go_docker/mynikki/infrastructure/database"
 )
 
 type PlatformRepository struct {

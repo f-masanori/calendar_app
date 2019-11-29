@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/f-masanori/my-nikki_dev/docker/go/infrastructure/database"
+	"go_docker/mynikki/infrastructure/database"
 	"testing"
 )
 

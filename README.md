@@ -89,5 +89,10 @@
   - git commit --amend -m "書き直しメッセージ"
   - これで直前のcommitしたメッセージを変更できる
   - 参考(https://www.granfairs.com/blog/staff/git-commit-fix)
+- gitでcommit を間違えた時
+  - git reset --hard HEAD^ で直前のcommitを削除
+- git で commit のログ確認
+  - git log
+
 - go modはいづれ導入
 

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/f-masanori/my-nikki_dev/docker/go/conf"
-	"github.com/f-masanori/my-nikki_dev/docker/go/infrastructure/router"
+	"go_docker/mynikki/conf"
+	"go_docker/mynikki/infrastructure/router"
 	_ "github.com/go-sql-driver/mysql"
 )
 

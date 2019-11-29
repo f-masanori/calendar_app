@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/f-masanori/my-nikki_dev/docker/go/infrastructure/database"
-	sqlcmd "github.com/f-masanori/my-nikki_dev/docker/go/interfaces/database"
-	"github.com/f-masanori/my-nikki_dev/docker/go/services"
+	"go_docker/mynikki/infrastructure/database"
+	sqlcmd "go_docker/mynikki/interfaces/database"
+	"go_docker/mynikki/services"
 )
 
 type PlatformHandler struct {

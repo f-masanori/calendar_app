@@ -6,10 +6,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/f-masanori/my-nikki_dev/docker/go/entities"
-	"github.com/f-masanori/my-nikki_dev/docker/go/infrastructure/database"
-	sqlcmd "github.com/f-masanori/my-nikki_dev/docker/go/interfaces/database"
-	"github.com/f-masanori/my-nikki_dev/docker/go/services"
+	"go_docker/mynikki/entities"
+	"go_docker/mynikki/infrastructure/database"
+	sqlcmd "go_docker/mynikki/interfaces/database"
+	"go_docker/mynikki/services"
 )
 
 type UserHandler struct {
@@ -72,7 +72,7 @@ func (h *UserHandler) NewUser(w http.ResponseWriter, r *http.Request) {
 	}
 	/* ******* */
 
-	fmt.Println(entities.Platform_map["ios"])
+	// fmt.Println(entities.Platform_map["ios"])
 
 	/* Presenter */
 	json_user,err := json.Marshal(user)

@@ -6,9 +6,9 @@ import (
 	"net/http"
 	// "os"
 
-	Authentication "github.com/f-masanori/my-nikki_dev/docker/go/infrastructure"
-	"github.com/f-masanori/my-nikki_dev/docker/go/infrastructure/database"
-	"github.com/f-masanori/my-nikki_dev/docker/go/interfaces/handlers"
+	Authentication "go_docker/mynikki/infrastructure"
+	"go_docker/mynikki/infrastructure/database"
+	"go_docker/mynikki/interfaces/handlers"
 
 	"github.com/gorilla/mux"
 )

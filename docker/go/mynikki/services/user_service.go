@@ -3,7 +3,7 @@ package services
 import (
 	"fmt"
 	"strconv"
-	"github.com/f-masanori/my-nikki_dev/docker/go/entities"
+	"go_docker/mynikki/entities"
 )
 
 type UserRepository interface {
