@@ -26,7 +26,7 @@ func Create_seed_data_to_users(DB *sql.DB){
 		fmt.Println("error1")
 	}
 	defer stmtInsert.Close()
-	result, err := stmtInsert.Exec("name")
+	result, err := stmtInsert.Exec("testname")
 	if err != nil{
 		fmt.Println("error2")
 	}

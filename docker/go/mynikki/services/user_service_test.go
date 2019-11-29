@@ -11,9 +11,11 @@ func TestGetAllSuccess(t *testing.T) {
 	/* テストのためのconfig実体作成 */
 	conf.Test()
 
+	/* テスト用データベースに接続 */
 	DBhandler := database.TestNewSqlHandler()
 
 	NewUserService := NewUserService(DBhandler)
+	
 	users, err := NewUserService.GetAll()
 	fmt.Println("test")
 	fmt.Println(users)

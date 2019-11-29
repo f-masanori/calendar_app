@@ -23,7 +23,7 @@
 - テーブル名 ... 複数形
 - カラム...基本単数系
 
-​## DB 
+## DB 
 
 
 
@@ -32,7 +32,7 @@
 ##### 動いているコンテナ内でのコマンドの実行
 - $ docker exec -i  63b7de01ee21 /bin/bash -c "cd ./dbseedgo && ls"
   - このようにすれば、コンテナ内のどこのディレクトリ内でもコマンドの実行ができる
-#### migrationツール
+### DB migration
 - sql-migrateを使用
 
   -  https://github.com/rubenv/sql-migrate
@@ -45,18 +45,18 @@
   - DBの種類別の設定方法
     - https://github.com/rubenv/sql-migrate/blob/master/test-integration/dbconfig.yml
     - https://qiita.com/k-kurikuri/items/946e2bf8c79176ef3ff0
-- 基本操作
+- 基本操作 (dbconfig.ymlのある場所で行う)
     - migrationファイルの新規作成
-    - $ sql-migrate new create_テーブル名(複数形);
-      - ex) $ sql-migrate new create_users;
-      - docker/go/migrations に  作成日付時間-create_users.sql という雛形sqlファイルが作成されるためその中SQL文を書き込む
+      - $ sql-migrate new create_テーブル名(複数形);
+        - ex) $ sql-migrate new create_users; 
+        - docker/go/migrations に  作成日付時間-create_users.sql という雛形sqlファイルが作成されるためその中SQL文を書き込む
     - migrationの実行
       - $ sql-migrate up
     - migration ドライラン
       - $ sql-migrate up -dryrun
-    - マイグレーションのロールバック
+    - migrationのroll back(ロールバック)
       - $ sql-migrate down
-    - マイグレーションの実行状態確認
+    - migrationの実行状態確認
       -  $ sql-migrate status
 ##### mysql接続
 - $ mysql -u root -p 
@@ -73,15 +73,18 @@
   - ↑構造体に直接記入
 
 ##### 二つの違いは？
-- $ docker-compose build
-- $ docker-compose up 
+- $ docker-compose build → imageの構築
+- $ docker-compose up → image・コンテナの構築& コンテナの起動
 
 #### アーキテクチャメモ
+
+- クリーンアーキテクチャ使用(正しい構成なのかはわからない)
+
 - infrastructure/router で ルーティング
 - infrastructure/router の　userHandler := handlers.NewUserHandler(database.NewSqlHandler())　でuserHandlerの実体作成.userHandlerをレシーバーとするメソッドがそれぞれのハンドラー(コントローラ)
 
 #### mockDBについて
-- go-sqlmock
+- ~~go-sqlmock~~
   - ↑ネット上に参考が少ないため使用しない
 - https://qiita.com/gold-kou/items/cb174690397f651e2d7f
 

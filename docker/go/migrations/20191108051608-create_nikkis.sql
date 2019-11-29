@@ -1,9 +1,12 @@
 
 -- +migrate Up
 CREATE TABLE IF NOT EXISTS nikkis (  
-    id INT UNSIGNED NOT NULL,
+    id INT UNSIGNED NOT NULL auto_increment,
+    user_id INT(11) unsigned NOT NULL,
     created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     updated_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+    date INT UNSIGNED NOT NULL,
+    content VARCHAR(255) NOT NULL,
     title VARCHAR(255) NOT NULL,
     PRIMARY KEY(id));
 -- +migrate Down

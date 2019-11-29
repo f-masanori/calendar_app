@@ -20,6 +20,7 @@ type UserService struct {
 	UserRepository UserRepository
 }
 
+/* for test */
 func NewUserService(sqlHandler *database.SqlHandler) *UserService {
 	return &UserService{
 		UserRepository: &sqlcmd.UserRepository{
@@ -27,6 +28,7 @@ func NewUserService(sqlHandler *database.SqlHandler) *UserService {
 		},
 	}
 }
+/* ******** */
 
 // Index
 func (s *UserService) GetAll() (entities.Users, error) {
