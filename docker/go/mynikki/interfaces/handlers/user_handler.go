@@ -72,7 +72,7 @@ func (h *UserHandler) NewUser(w http.ResponseWriter, r *http.Request) {
 	}
 	/* ******* */
 
-	// fmt.Println(entities.Platform_map["ios"])
+	fmt.Println(entities.Platform_map["ios"])
 
 	/* Presenter */
 	json_user,err := json.Marshal(user)

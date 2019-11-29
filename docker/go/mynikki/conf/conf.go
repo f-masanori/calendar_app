@@ -19,3 +19,13 @@ func Init() {
 	Database.Password = "mysql"
 	Database.Dbname = "app"
 }
+
+func Test() {
+	Database.Drivername = "mysql"
+	Database.Host = "mysql_container"
+	Database.Port = "3306"
+	Database.User = "root"
+	Database.Password = "mysql"
+	Database.Dbname = "app"
+
+}

@@ -84,6 +84,13 @@
 - go-sqlmock
   - ↑ネット上に参考が少ないため使用しない
 - https://qiita.com/gold-kou/items/cb174690397f651e2d7f
+
+### テスト
+- 標準パッケージのtestingを使用する
+- Services(アプリケーションロジック)のテスト
+  1. dockerコンテナを立ち上げてexecとかで中に入る
+  2. go test -run Get とかでGetと名のつく関数のテストを実行
+    - ex)go test -run Get で func TestGetAllSuccessが実行
 #### メモ
 - gitでcommit メッセージを間違えた時
   - git commit --amend -m "書き直しメッセージ"
@@ -95,4 +102,5 @@
   - git log
 
 - go modはいづれ導入
+
 

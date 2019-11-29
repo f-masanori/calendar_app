@@ -47,31 +47,6 @@ func NewSqlHandler() *SqlHandler {
 	return sqlHandler
 }
 
-func Connect() *sql.DB {
-
-	//configからDBの読み取り
-	connectionCmd := fmt.Sprintf(
-		"%s:%s@tcp(%s:%s)/%s",
-		conf.Database.User,
-		conf.Database.Password,
-		conf.Database.Host,
-		conf.Database.Port,
-		conf.Database.Dbname,
-	)
-
-	Db, ConnectionError = sql.Open(conf.Database.Drivername, connectionCmd)
-	fmt.Println("DB-information")
-	fmt.Println("drivername: " + conf.Database.Drivername)
-	fmt.Println("host: " + conf.Database.Host)
-	fmt.Println("port: " + conf.Database.Port)
-	fmt.Println("dbname: " + conf.Database.Dbname)
-	fmt.Println("______________")
-	if ConnectionError != nil {
-		log.Fatal("error connecting to database: ", ConnectionError)
-	}
-	return Db
-}
-
 func CloseConn() {
 	Db.Close()
 }
