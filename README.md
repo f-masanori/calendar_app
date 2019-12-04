@@ -11,17 +11,22 @@
 - /users (GET)
     - req : なし
     - res : usersテーブルから全データを持ってくる(json)
-    
 - /app (POST)
     - userテーブルのnameを追加
     - req : json("name")
       - 例 {"name":"nmasanori"}
     - res : json("uuid","name")
     
+- /nikkis (GET)
+    - req : なし
+    - res : nikkisテーブルから全データを持ってくる(json)
+- /nikkis (POST)
+    - req : json("UserId", "Date", "Title", "Content")
+    - res : json("Id", "UserId", "Date", "Title", "Content")
 ## DB命名規則
 
 - テーブル名 ... 複数形
-- カラム...基本単数系
+- カラム ... 基本単数系
 
 ## DB 
 
@@ -100,11 +105,28 @@
   - git commit --amend -m "書き直しメッセージ"
   - これで直前のcommitしたメッセージを変更できる
   - 参考(https://www.granfairs.com/blog/staff/git-commit-fix)
+  
 - gitでcommit を間違えた時
+  
   - git reset --hard HEAD^ で直前のcommitを削除
+  
 - git で commit のログ確認
-  - git log
-
+  
+- git log
+  
 - go modはいづれ導入
+
+  _________
+
+
+- Go で int64 を int に変換するには int という関数を使う。
+
+  ```
+  b = int(a)
+  ```
+
+  これで int64 の a を値そのままで int 型の b に変換できる。
+  
+- 構造体に&(アドレス演算子）を使って初期化したり、newキーワードを使用すると**ポインタ型**で受け取ることができます。(関数の返しの時などの型に注意する)
 
 

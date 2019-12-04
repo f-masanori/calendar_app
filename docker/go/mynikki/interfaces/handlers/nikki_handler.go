@@ -76,8 +76,6 @@ func (h *NikkiHandler) CreateNikki(w http.ResponseWriter, r *http.Request) {
 	}
 	/* ******* */
 
-// 	fmt.Println(entities.Platform_map["ios"])
-
 	/* Presenter */
 	json_nikki,err := json.Marshal(nikki)
 	if err != nil {
@@ -86,6 +84,35 @@ func (h *NikkiHandler) CreateNikki(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(json_nikki)
+	/* ******* */
+}
+
+func (h *NikkiHandler) DeleteNikki(w http.ResponseWriter, r *http.Request){
+	/* handler マッピング*/
+	type Request struct {
+		UserId  int     `json:"UserId"`
+		Date    int 	`json:"Date"`
+	}
+	decoder := json.NewDecoder(r.Body)
+	request := new(Request)
+	err := decoder.Decode(&request)
+	if err != nil {
+		panic(err)
+	}
+	log.Println(request)
+	/* ******* */
+	/* service 呼び出し */
+	confirmDelete := h.Service.DeleteNikki(request.UserId,request.Date)
+	fmt.Println(confirmDelete)
+	/* ******* */
+	/* Presenter */
+	json_confirmDelete,err := json.Marshal(confirmDelete)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(json_confirmDelete)
 	/* ******* */
 }
 

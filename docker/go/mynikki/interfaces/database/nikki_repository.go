@@ -73,7 +73,33 @@ func (repo *NikkiRepository) CreateNikki(UserId int,Date int,Title string, Conte
 
 	return nikki, nil
 }
+func (repo *NikkiRepository) DeleteNikki(UserId int,Date int) (int,int,int,error){
+	stmtDelete, err := repo.SqlHandler.DB.Prepare("DELETE FROM nikkis WHERE user_id = ? and date = ?")
+	if err != nil {
+		panic(err.Error())
+	}
+	defer stmtDelete.Close()
 
+	result, err := stmtDelete.Exec(UserId, Date)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	_rowsAffect, err := result.RowsAffected()
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Println(_rowsAffect)
+	rowsAffect := int(_rowsAffect)
+	if rowsAffect == 0{
+		fmt.Println("削除できません")
+	} else if rowsAffect == 1{
+		fmt.Println("削除完了")
+	} else{
+		fmt.Println("DB table エラー")//削除データが2個以上は起らないはず
+	}
+	return UserId,Date,rowsAffect,err
+}
 // func (repo *UserRepository) FindAll() (entities.Users, error) {
 // 	var users entities.Users
 
