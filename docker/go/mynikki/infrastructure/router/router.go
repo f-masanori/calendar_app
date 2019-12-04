@@ -36,6 +36,7 @@ func Init() {
 	platformHandler := handlers.NewPlatformHandler(DBhandler)
 
 	router.HandleFunc("/nikkis", nikkiHandler.Index).Methods("GET")
+	router.HandleFunc("/nikki", nikkiHandler.CreateNikki).Methods("POST")
 	router.HandleFunc("/users", userHandler.Index).Methods("GET")
 	router.HandleFunc("/test", userHandler.Test).Methods("GET")
 	router.HandleFunc("/testauth", Authentication.AuthMiddleware(userHandler.Index)).Methods("GET")

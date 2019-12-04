@@ -2,7 +2,7 @@ package database
 
 import (
 	"fmt"
-	// "log"
+	"log"
 
 	"go_docker/mynikki/entities"
 	"go_docker/mynikki/infrastructure/database"
@@ -11,9 +11,34 @@ import (
 type NikkiRepository struct {
 	SqlHandler *database.SqlHandler
 }
-func (repo *NikkiRepository) FindAll()  {
-	aaa := new(entities.Nikki)
-	fmt.Println(aaa)
+func (repo *NikkiRepository) FindAll() (entities.Nikkis, error)  {
+	var nikkis entities.Nikkis
+	fmt.Println("show nikkis")
+	rows, err := repo.SqlHandler.DB.Query("SELECT * from nikkis;")
+	if err != nil {
+		log.Print("error executing database query: ", err)
+	}
+	defer rows.Close()
+
+	var nikkis_table_colum Nikkis_table
+	for rows.Next() {
+		var nikki entities.Nikki
+		err := rows.Scan(&nikkis_table_colum.Id, &nikkis_table_colum.User_id,
+			&nikkis_table_colum.Created_at, &nikkis_table_colum.Updated_at,
+			&nikkis_table_colum.Date, &nikkis_table_colum.Content,
+			&nikkis_table_colum.Title)
+		if err != nil {
+			fmt.Println(err)
+			panic(err.Error())
+		}
+		nikki.Id = nikkis_table_colum.Id
+		nikki.User_id = nikkis_table_colum.User_id
+		nikki.Title = nikkis_table_colum.Title
+		nikki.Date = nikkis_table_colum.Date
+		nikki.Content = nikkis_table_colum.Content
+		nikkis = append(nikkis, nikki)
+	}
+	return nikkis, nil
 }
 // func (repo *NikkiRepository) DeleteNikki()  {
 // 	var nikki entities.Nikki
@@ -24,7 +49,7 @@ func (repo *NikkiRepository) FindAll()  {
 // 		return nikki, err
 // 	}
 // }
-func (repo *NikkiRepository) CreateNikki() (entities.Nikki, error)  {
+func (repo *NikkiRepository) CreateNikki(UserId int,Date int,Title string, Content string) (entities.Nikki, error)  {
 	var nikki entities.Nikki
 	statement := "INSERT INTO nikkis(user_id,date,title,content) VALUES(?,?,?,?)"
 	stmtInsert, err := repo.SqlHandler.DB.Prepare(statement)
@@ -33,14 +58,19 @@ func (repo *NikkiRepository) CreateNikki() (entities.Nikki, error)  {
 		return nikki, err
 	}
 	defer stmtInsert.Close()
-	result, err := stmtInsert.Exec("2","20191128","testtilt","testcontenstttt")
+	result, err := stmtInsert.Exec(UserId,Date,Title,Content)
 	if err != nil {
 		fmt.Println("stmtInsert.Exec　error")
 		return nikki, err
 	}
 	lastInsertID, err := result.LastInsertId()
-	nikki.Id = int(lastInsertID)
-	nikki.Date = 27001211
+
+	err = repo.SqlHandler.DB.QueryRow("SELECT id,user_id,date,title,content FROM nikkis WHERE id = ?", lastInsertID).Scan(&nikki.Id, &nikki.User_id,
+			&nikki.Date, &nikki.Title, &nikki.Content)
+	if err != nil {
+	log.Fatal(err)
+	}
+
 	return nikki, nil
 }
 

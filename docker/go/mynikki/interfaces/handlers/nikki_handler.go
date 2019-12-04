@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	// "encoding/json"
+	"encoding/json"
 	"fmt"
-	// "log"
+	"log"
 	"net/http"
 
 	// "go_docker/mynikki/entities"
@@ -28,62 +28,64 @@ func NewNikkiHandler(sqlHandler *database.SqlHandler) *NikkiHandler {
 
 func (h *NikkiHandler) Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("nikkihandler index")
-	h.Service.GetAll()
+	
 	/* handler call service  */
-	// users, error := h.Service.GetAll() //GetAllの返り値はエンティティのusersでいい？
-	// if error != nil {
-	// 	fmt.Println(error)
-	// 	return
-	// }
+	nikkis, err := h.Service.GetAll()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	/* ************ */
 	
 	/* presenter */
 	// users構造体 → json変換
-	// json_users, err := json.Marshal(users)
-	// if err != nil {
-	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
-	// 	return
-	// }
+	json_nikkis, err := json.Marshal(nikkis)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-	// w.Header().Set("Content-Type", "application/json")
-	// w.Write(json_users)
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(json_nikkis)
 	/* ********* */
 }
 
-// func (h *UserHandler) NewUser(w http.ResponseWriter, r *http.Request) {
-// 	/* handler マッピング*/
-// 	type Request struct {
-// 		Uid  string `json:"uid"`
-// 		Name string `json:"name"`
-// 	}
-// 	decoder := json.NewDecoder(r.Body)
-// 	request := new(Request)
-// 	err := decoder.Decode(&request)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	log.Println(request)
-// 	/* ******* */
+func (h *NikkiHandler) CreateNikki(w http.ResponseWriter, r *http.Request) {
+	/* handler マッピング*/
+	type Request struct {
+		UserId  int     `json:"UserId"`
+		Date    int 	`json:"Date"`
+		Content string  `json:"Content"`
+		Title   string 	`json:"Title"`
+	}
+	decoder := json.NewDecoder(r.Body)
+	request := new(Request)
+	err := decoder.Decode(&request)
+	if err != nil {
+		panic(err)
+	}
+	log.Println(request)
+	/* ******* */
 
-// 	/* handler service呼び出し */
-// 	user,err :=h.Service.StoreNewUser(request.Name)
-// 	if err != nil{
-// 		fmt.Println(err)
-// 	}else{
-// 		fmt.Println("succused call Service.StoreNewUser")
-// 	}
-// 	/* ******* */
+	/* handler service呼び出し */
+	nikki,err :=h.Service.CreateNikki(request.UserId,request.Date,request.Title,request.Content)
+	if err != nil{
+		fmt.Println(err)
+	}else{
+		fmt.Println("succused call Service.StoreNewUser")
+	}
+	/* ******* */
 
 // 	fmt.Println(entities.Platform_map["ios"])
 
-// 	/* Presenter */
-// 	json_user,err := json.Marshal(user)
-// 	if err != nil {
-// 		http.Error(w, err.Error(), http.StatusInternalServerError)
-// 		return
-// 	}
-// 	w.Header().Set("Content-Type", "application/json")
-// 	w.Write(json_user)
-// 	/* ******* */
-// }
+	/* Presenter */
+	json_nikki,err := json.Marshal(nikki)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(json_nikki)
+	/* ******* */
+}
 
