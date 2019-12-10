@@ -12,6 +12,6 @@ type Nikkis_table struct {
 	Created_at string `db:"created_at"`
 	Updated_at string `db:"updated_at"`
 	Date       int    `db:"date"`
-	Content    string `db:"content"`
 	Title      string `db:"title"`
+	Content    string `db:"content"`
 }

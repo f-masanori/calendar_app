@@ -86,7 +86,24 @@ func (h *NikkiHandler) CreateNikki(w http.ResponseWriter, r *http.Request) {
 	w.Write(json_nikki)
 	/* ******* */
 }
-
+func (h *NikkiHandler) EditNikki(w http.ResponseWriter, r *http.Request) {
+	/* handler マッピング*/
+	type Request struct {
+		UserId  int     `json:"UserId"`
+		Date    int 	`json:"Date"`
+		Content string  `json:"Content"`
+		Title   string 	`json:"Title"`
+	}
+	decoder := json.NewDecoder(r.Body)
+	request := new(Request)
+	err := decoder.Decode(&request)
+	if err != nil {
+		panic(err)
+	}
+	log.Println(request)
+	/* ******* */
+	h.Service.EditNikki(request.UserId,request.Date,request.Title,request.Content)
+}
 func (h *NikkiHandler) DeleteNikki(w http.ResponseWriter, r *http.Request){
 	/* handler マッピング*/
 	type Request struct {

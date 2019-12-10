@@ -11,10 +11,10 @@ import (
 type UserRepository interface {
 	FindAll() (entities.Users, error)
 	CreateUser(string) (entities.User, error)
+	DeleteUser(int) (int,error)
 	// Find(int) (entities.User, error)
 	// Save(*entities.User) (entities.User, error)
 	// Update(int, *entities.User) (entities.User, error)
-	// Delete(int) (error)
 }
 type UserService struct {
 	UserRepository UserRepository
@@ -44,4 +44,10 @@ func (s *UserService) StoreNewUser(name string) (entities.User, error) {
 		fmt.Println("Created New user id=" + strconv.Itoa(user.Id) + " name=" + user.Name)
 	}
 	return user, err
+}
+func (s *UserService) DeleteUser(id int) int{
+	fmt.Println("DeleteUser")
+	returnId,err := s.UserRepository.DeleteUser(id)
+	fmt.Println(err)
+	return returnId
 }

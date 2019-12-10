@@ -84,7 +84,32 @@ func (h *UserHandler) NewUser(w http.ResponseWriter, r *http.Request) {
 	w.Write(json_user)
 	/* ******* */
 }
-
+func (h *UserHandler) DeleteUser(w http.ResponseWriter, r *http.Request){
+	/* handler マッピング*/
+	type Request struct {
+		Id  int `json:"Id"`
+	}
+	decoder := json.NewDecoder(r.Body)
+	request := new(Request)
+	err := decoder.Decode(&request)
+	if err != nil {
+		panic(err)
+	}
+	log.Println(request)
+	/* ******* */
+	/* handler service呼び出し */
+	returnId := h.Service.DeleteUser(request.Id)
+	/* ******* */
+	/* Presenter */
+	json_returnId,err := json.Marshal(returnId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(json_returnId)
+	/* ******* */
+}
 func (h *UserHandler) Test(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("handler  Test")
 	// 抽象的にGetALL

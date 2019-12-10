@@ -129,4 +129,31 @@
   
 - 構造体に&(アドレス演算子）を使って初期化したり、newキーワードを使用すると**ポインタ型**で受け取ることができます。(関数の返しの時などの型に注意する)
 
+______
+
+- database/ sql 
+
+  -  Query と Exec に分けて考えます。 Query は副作用のない `SELECT`、Exec は副作用のある `INSERT` や、`UPDATE`、`DELETE` に当たります。
+  - トランザクションにてprepareを使うときは少し気をつけるhttps://precure-3dprinter.hatenablog.jp/entry/2018/11/22/Golang%E3%81%A7%E3%83%88%E3%83%A9%E3%83%B3%E3%82%B6%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%92%E4%BD%BF%E3%81%86%E8%A9%B1](https://precure-3dprinter.hatenablog.jp/entry/2018/11/22/Golangでトランザクションを使う話)
+  - トランザクションの冗長さを無くせるらしいhttps://qiita.com/miya-masa/items/316256924a1f0d7374bb
+
+  ______
+
+- go のstring int の互換
+
+  - import("strconv")して
+    
+  - ```
+    var i int
+    var s string="123"
+    i, _ = strconv.Atoi(s)
+    fmt.Println(i) // -> 123
+    ```
+    
+  - ```
+    var i int=321
+    var s string
+    s = strconv.Itoa(i)
+    fmt.Println(s) // -> "123"
+    ```
 

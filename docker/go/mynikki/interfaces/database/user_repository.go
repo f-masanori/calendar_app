@@ -3,9 +3,11 @@ package database
 import (
 	"fmt"
 	"log"
-
+	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
 	"go_docker/mynikki/entities"
 	"go_docker/mynikki/infrastructure/database"
+	"strconv"
 )
 
 type UserRepository struct {
@@ -64,15 +66,50 @@ func (repo *UserRepository) CreateUser(name string) (entities.User, error) {
 	return user, nil
 }
 
-// func (repo *UserRepository) Find(id int) (entities.User, error) {
-// 	var user entities.User
+func (repo *UserRepository) DeleteUser(id int) (int,error){
+	//DeleteUserでは紐づけられたnikkiも削除する
+	//トランザクションを使用する
+	tx, err := repo.SqlHandler.DB.Begin()  // トランザクションを開始
+	if err != nil {
+        return 0,err
+	}
+	// Transactionのための関数
+    trans := func(tx *sql.Tx) (int64,error){
+			stmt1, _ := tx.Prepare("DELETE FROM users WHERE id = ?")
+            result, err := stmt1.Exec(id)
+            if err != nil {
+                return -1,err
+			}
+			rowsAffect_int64, err := result.RowsAffected()
 
-// 	if err := repo.SqlHandler.Conn.Where("id = ?", id).First(&user).Error; err != nil {
-// 		return user, err
-// 	}
+			stmt2, _ := tx.Prepare("DELETE FROM nikkis WHERE user_id = ?")
+            _, err = stmt2.Exec(id)
+            if err != nil {
+                return -1,err
+			}
+			return rowsAffect_int64,nil
+	}
 
-// 	return user, nil
-// }
+	rowsAffect_int64,err := trans(tx);
+	if err != nil {
+		tx.Rollback()
+        return 0,err
+    }
+
+	rowsAffect := int(rowsAffect_int64)
+	if rowsAffect == 0{
+		fmt.Println("User id = "+strconv.Itoa(id)+" は存在しません")
+	} else if rowsAffect == 1{
+		fmt.Println("User id = "+strconv.Itoa(id)+" 削除")
+	} else{
+		fmt.Println("DBエラー")
+		fmt.Println("_rowsAffect"+strconv.Itoa(rowsAffect))
+	}
+	// Commit
+	tx.Commit() 
+	return id,nil
+}
+
 func NewUserRepository(sqlHandler *database.SqlHandler) *UserRepository {
 	return &UserRepository{
 		SqlHandler: sqlHandler,

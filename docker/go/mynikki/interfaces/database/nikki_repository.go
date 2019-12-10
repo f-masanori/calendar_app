@@ -11,7 +11,8 @@ import (
 type NikkiRepository struct {
 	SqlHandler *database.SqlHandler
 }
-func (repo *NikkiRepository) FindAll() (entities.Nikkis, error)  {
+
+func (repo *NikkiRepository) FindAll() (entities.Nikkis, error) {
 	var nikkis entities.Nikkis
 	fmt.Println("show nikkis")
 	rows, err := repo.SqlHandler.DB.Query("SELECT * from nikkis;")
@@ -40,6 +41,7 @@ func (repo *NikkiRepository) FindAll() (entities.Nikkis, error)  {
 	}
 	return nikkis, nil
 }
+
 // func (repo *NikkiRepository) DeleteNikki()  {
 // 	var nikki entities.Nikki
 // 	statement := "DELETE FROM nikkis WHERE id = ?"
@@ -49,7 +51,7 @@ func (repo *NikkiRepository) FindAll() (entities.Nikkis, error)  {
 // 		return nikki, err
 // 	}
 // }
-func (repo *NikkiRepository) CreateNikki(UserId int,Date int,Title string, Content string) (entities.Nikki, error)  {
+func (repo *NikkiRepository) CreateNikki(UserId int, Date int, Title string, Content string) (entities.Nikki, error) {
 	var nikki entities.Nikki
 	statement := "INSERT INTO nikkis(user_id,date,title,content) VALUES(?,?,?,?)"
 	stmtInsert, err := repo.SqlHandler.DB.Prepare(statement)
@@ -58,7 +60,7 @@ func (repo *NikkiRepository) CreateNikki(UserId int,Date int,Title string, Conte
 		return nikki, err
 	}
 	defer stmtInsert.Close()
-	result, err := stmtInsert.Exec(UserId,Date,Title,Content)
+	result, err := stmtInsert.Exec(UserId, Date, Title, Content)
 	if err != nil {
 		fmt.Println("stmtInsert.Exec　error")
 		return nikki, err
@@ -66,14 +68,14 @@ func (repo *NikkiRepository) CreateNikki(UserId int,Date int,Title string, Conte
 	lastInsertID, err := result.LastInsertId()
 
 	err = repo.SqlHandler.DB.QueryRow("SELECT id,user_id,date,title,content FROM nikkis WHERE id = ?", lastInsertID).Scan(&nikki.Id, &nikki.User_id,
-			&nikki.Date, &nikki.Title, &nikki.Content)
+		&nikki.Date, &nikki.Title, &nikki.Content)
 	if err != nil {
-	log.Fatal(err)
+		log.Fatal(err)
 	}
 
 	return nikki, nil
 }
-func (repo *NikkiRepository) DeleteNikki(UserId int,Date int) (int,int,int,error){
+func (repo *NikkiRepository) DeleteNikki(UserId int, Date int) (int, int, int, error) {
 	stmtDelete, err := repo.SqlHandler.DB.Prepare("DELETE FROM nikkis WHERE user_id = ? and date = ?")
 	if err != nil {
 		panic(err.Error())
@@ -91,15 +93,41 @@ func (repo *NikkiRepository) DeleteNikki(UserId int,Date int) (int,int,int,error
 	}
 	fmt.Println(_rowsAffect)
 	rowsAffect := int(_rowsAffect)
-	if rowsAffect == 0{
+	if rowsAffect == 0 {
 		fmt.Println("削除できません")
-	} else if rowsAffect == 1{
+	} else if rowsAffect == 1 {
 		fmt.Println("削除完了")
-	} else{
-		fmt.Println("DB table エラー")//削除データが2個以上は起らないはず
+	} else {
+		fmt.Println("DB table エラー") //削除データが2個以上は起らないはず
 	}
-	return UserId,Date,rowsAffect,err
+	return UserId, Date, rowsAffect, err
 }
+func (repo *NikkiRepository) EditNikki(UserId int, Date int, Title string, Content string) {
+	stmtEdit, err := repo.SqlHandler.DB.Prepare("UPDATE nikkis SET title = ?,content = ? WHERE user_id = ? and date = ?")
+	if err != nil {
+		panic(err.Error())
+	}
+	defer stmtEdit.Close()
+
+	result, err := stmtEdit.Exec(Title, Content,2,20191128)
+	if err != nil {
+		panic(err.Error())
+	}
+	_rowsAffect, err := result.RowsAffected()
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Println(_rowsAffect)
+	rowsAffect := int(_rowsAffect)
+	if rowsAffect == 0 {
+		fmt.Println("削除できません")
+	} else if rowsAffect == 1 {
+		fmt.Println("削除完了")
+	} else {
+		fmt.Println("DB table エラー") //削除データが2個以上は起らないはず
+	}
+}
+
 // func (repo *UserRepository) FindAll() (entities.Users, error) {
 // 	var users entities.Users
 

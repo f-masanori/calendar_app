@@ -9,6 +9,7 @@ type NikkiRepository interface {
 	FindAll() (entities.Nikkis, error)
 	CreateNikki(int,int,string,string) (entities.Nikki, error)
 	DeleteNikki(int, int) (int,int,int,error)
+	EditNikki(int,int,string,string)
 }
 type NikkiService struct {
 	NikkiRepository NikkiRepository
@@ -38,6 +39,9 @@ func (n *NikkiService) CreateNikki(UserId int,Date int,Title string,Content stri
 	}
 	fmt.Println(nikki)
 	return nikki,err
+}
+func (n *NikkiService) EditNikki(UserId int,Date int,Title string,Content string){
+	n.NikkiRepository.EditNikki(UserId,Date,Title,Content)
 }
 
 func (n *NikkiService) DeleteNikki(UserId int,Date int) *ConfirmDelete { 

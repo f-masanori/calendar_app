@@ -1,14 +1,16 @@
 package services
 
 import (
-	"fmt" 
-	"testing"
 	"go_docker/mynikki/conf"
+	"testing"
+
 	// "go_docker/mynikki/entities"
 	"go_docker/mynikki/infrastructure/database"
-	_ "github.com/go-sql-driver/mysql"
 	"reflect"
+
+	_ "github.com/go-sql-driver/mysql"
 )
+
 func TestGetAllSuccess(t *testing.T) {
 	/* テストのためのconfig実体作成 */
 	conf.Test()
@@ -17,19 +19,20 @@ func TestGetAllSuccess(t *testing.T) {
 	DBhandler := database.TestNewSqlHandler()
 
 	NewUserService := NewUserService(DBhandler)
-	
+
 	users, err := NewUserService.GetAll()
 
 	expected := "entities.Users"
 	autual := reflect.TypeOf(users).String()
-	
-	if autual != expected{
+
+	if autual != expected {
 		t.Fatalf("failed test %#v", "返り値型エラー")
 	}
-	if err !=nil{
+	if err != nil {
 		t.Fatalf("failed test %#v", err)
 	}
 }
+
 // func TestStoreNewUserSuccess(t *testing.T) {
 // 	conf.Init()
 // 	DBhandler := database.NewSqlHandler()
