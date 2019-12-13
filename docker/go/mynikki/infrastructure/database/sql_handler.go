@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"go_docker/mynikki/conf"
 	_ "github.com/go-sql-driver/mysql"
+	"go_docker/mynikki/conf"
 )
 
 var Db *sql.DB
@@ -40,7 +40,7 @@ func NewSqlHandler() *SqlHandler {
 	if ConnectionError != nil {
 		log.Fatal("error connecting to database: ", ConnectionError)
 	}
-	
+
 	sqlHandler := new(SqlHandler)
 	sqlHandler.DB = Db
 

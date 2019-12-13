@@ -11,7 +11,7 @@ import (
 type UserRepository interface {
 	FindAll() (entities.Users, error)
 	CreateUser(string) (entities.User, error)
-	DeleteUser(int) (int,error)
+	DeleteUser(int) (int, error)
 	// Find(int) (entities.User, error)
 	// Save(*entities.User) (entities.User, error)
 	// Update(int, *entities.User) (entities.User, error)
@@ -28,6 +28,7 @@ func NewUserService(sqlHandler *database.SqlHandler) *UserService {
 		},
 	}
 }
+
 /* ******** */
 
 // Index
@@ -45,9 +46,9 @@ func (s *UserService) StoreNewUser(name string) (entities.User, error) {
 	}
 	return user, err
 }
-func (s *UserService) DeleteUser(id int) int{
+func (s *UserService) DeleteUser(id int) int {
 	fmt.Println("DeleteUser")
-	returnId,err := s.UserRepository.DeleteUser(id)
+	returnId, err := s.UserRepository.DeleteUser(id)
 	fmt.Println(err)
 	return returnId
 }

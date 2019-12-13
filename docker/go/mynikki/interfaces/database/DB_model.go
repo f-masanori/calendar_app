@@ -7,11 +7,12 @@ type Users_table struct {
 	Updated_at string `db:"updated_at"`
 }
 type Nikkis_table struct {
-	Id         int    `db:"id"`
-	User_id    int    `db:"user_id"`
-	Created_at string `db:"created_at"`
-	Updated_at string `db:"updated_at"`
-	Date       int    `db:"date"`
-	Title      string `db:"title"`
-	Content    string `db:"content"`
+	Id             int    `db:"id"`
+	User_id        int    `db:"user_id"`
+	Date           int    `db:"date"`
+	Title          string `db:"title"`
+	Content        string `db:"content"`
+	NumberOfPhotos int    `db:"number_of_photos"`
+	Created_at     string `db:"created_at"`
+	Updated_at     string `db:"updated_at"`
 }

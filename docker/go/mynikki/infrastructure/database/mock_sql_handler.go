@@ -22,9 +22,9 @@ func NewMockDbHandler() *SqlHandler {
 	mock.ExpectQuery(`SELECT * from`).WillReturnRows(rows)
 
 	// prep := mock.ExpectPrepare("^INSERT INTO articles*")
-    // prep.ExpectQuery().
-    //     WithArgs({Name: Ordinal:1 Value:test}, "test").
-    //     WillReturnRows(rows)
+	// prep.ExpectQuery().
+	//     WithArgs({Name: Ordinal:1 Value:test}, "test").
+	//     WillReturnRows(rows)
 	// mock.ExpectExec("UPDATE products").WillReturnResult(sqlmock.NewResult(1, 1))
 	// mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "students"`)).
 	// 	WillReturnRows(rows)

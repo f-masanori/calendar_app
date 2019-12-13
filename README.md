@@ -50,7 +50,7 @@
   - DBの種類別の設定方法
     - https://github.com/rubenv/sql-migrate/blob/master/test-integration/dbconfig.yml
     - https://qiita.com/k-kurikuri/items/946e2bf8c79176ef3ff0
-- 基本操作 (dbconfig.ymlのある場所で行う)
+- 基本操作 (コンテナ中のdbconfig.ymlのある場所で行う)
     - migrationファイルの新規作成
       - $ sql-migrate new create_テーブル名(複数形);
         - ex) $ sql-migrate new create_users; 
@@ -157,3 +157,8 @@ ______
     fmt.Println(s) // -> "123"
     ```
 
+______
+
+- docker上で開発する際にローカルのVScodeでコードの編集をしてもvscodeの拡張機能のフォーマッタが機能しないことがよくある
+  - そのためターミナルで　gofmt -s -w ./ これでその配下にあるgoファイルを全て整形して保存してくれる
+  - https://qiita.com/suin/items/9f9bdaa0cb9cb80cf752

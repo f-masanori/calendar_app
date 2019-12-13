@@ -1,9 +1,9 @@
 package main
 
 import (
+	_ "github.com/go-sql-driver/mysql"
 	"go_docker/mynikki/conf"
 	"go_docker/mynikki/infrastructure/router"
-	_ "github.com/go-sql-driver/mysql"
 )
 
 func init() {

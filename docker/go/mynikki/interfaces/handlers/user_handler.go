@@ -34,7 +34,7 @@ func (h *UserHandler) Index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	/* ************ */
-	
+
 	/* presenter */
 	// users構造体 → json変換
 	json_users, err := json.Marshal(users)
@@ -64,10 +64,10 @@ func (h *UserHandler) NewUser(w http.ResponseWriter, r *http.Request) {
 	/* ******* */
 
 	/* handler service呼び出し */
-	user,err :=h.Service.StoreNewUser(request.Name)
-	if err != nil{
+	user, err := h.Service.StoreNewUser(request.Name)
+	if err != nil {
 		fmt.Println(err)
-	}else{
+	} else {
 		fmt.Println("succused call Service.StoreNewUser")
 	}
 	/* ******* */
@@ -75,7 +75,7 @@ func (h *UserHandler) NewUser(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(entities.Platform_map["ios"])
 
 	/* Presenter */
-	json_user,err := json.Marshal(user)
+	json_user, err := json.Marshal(user)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -84,10 +84,10 @@ func (h *UserHandler) NewUser(w http.ResponseWriter, r *http.Request) {
 	w.Write(json_user)
 	/* ******* */
 }
-func (h *UserHandler) DeleteUser(w http.ResponseWriter, r *http.Request){
+func (h *UserHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	/* handler マッピング*/
 	type Request struct {
-		Id  int `json:"Id"`
+		Id int `json:"Id"`
 	}
 	decoder := json.NewDecoder(r.Body)
 	request := new(Request)
@@ -101,7 +101,7 @@ func (h *UserHandler) DeleteUser(w http.ResponseWriter, r *http.Request){
 	returnId := h.Service.DeleteUser(request.Id)
 	/* ******* */
 	/* Presenter */
-	json_returnId,err := json.Marshal(returnId)
+	json_returnId, err := json.Marshal(returnId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

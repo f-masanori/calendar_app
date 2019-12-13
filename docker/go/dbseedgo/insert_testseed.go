@@ -13,21 +13,21 @@ func main() {
 	/* conf.Initで設定構造体の実体を作成 */
 	conf.Init()
 
-	DBhandler :=  NewSqlHandler()
+	DBhandler := NewSqlHandler()
 
 	Create_seed_data_to_users(DBhandler)
 
 }
 
-func Create_seed_data_to_users(DB *sql.DB){
+func Create_seed_data_to_users(DB *sql.DB) {
 	statement := "INSERT INTO users(name) VALUES(?)"
-	stmtInsert ,err := DB.Prepare(statement)
-	if err != nil{
+	stmtInsert, err := DB.Prepare(statement)
+	if err != nil {
 		fmt.Println("error1")
 	}
 	defer stmtInsert.Close()
 	result, err := stmtInsert.Exec("testname")
-	if err != nil{
+	if err != nil {
 		fmt.Println("error2")
 	}
 	lastInsertID, err := result.LastInsertId()

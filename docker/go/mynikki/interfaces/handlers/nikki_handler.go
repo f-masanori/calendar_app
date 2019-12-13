@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	// "go_docker/mynikki/entities"
+	"github.com/gorilla/mux"
 	"go_docker/mynikki/infrastructure/database"
 	sqlcmd "go_docker/mynikki/interfaces/database"
 	"go_docker/mynikki/services"
@@ -28,7 +29,7 @@ func NewNikkiHandler(sqlHandler *database.SqlHandler) *NikkiHandler {
 
 func (h *NikkiHandler) Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("nikkihandler index")
-	
+
 	/* handler call service  */
 	nikkis, err := h.Service.GetAll()
 	if err != nil {
@@ -36,7 +37,7 @@ func (h *NikkiHandler) Index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	/* ************ */
-	
+
 	/* presenter */
 	// users構造体 → json変換
 	json_nikkis, err := json.Marshal(nikkis)
@@ -50,13 +51,26 @@ func (h *NikkiHandler) Index(w http.ResponseWriter, r *http.Request) {
 	/* ********* */
 }
 
+func (h *NikkiHandler) GetNikki(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r) //パスパラメータ取得
+	fmt.Println(vars["userId"])
+	/* handler call service  */
+	h.Service.GetNikki(1, 1)
+	/* ************ */
+}
+func (h *NikkiHandler) RegisterPhoto(w http.ResponseWriter, r *http.Request) {
+	/* handler call service  */
+	h.Service.GetNikki()
+	/* ************ */
+}
+
 func (h *NikkiHandler) CreateNikki(w http.ResponseWriter, r *http.Request) {
 	/* handler マッピング*/
 	type Request struct {
-		UserId  int     `json:"UserId"`
-		Date    int 	`json:"Date"`
-		Content string  `json:"Content"`
-		Title   string 	`json:"Title"`
+		UserId  int    `json:"UserId"`
+		Date    int    `json:"Date"`
+		Content string `json:"Content"`
+		Title   string `json:"Title"`
 	}
 	decoder := json.NewDecoder(r.Body)
 	request := new(Request)
@@ -68,16 +82,16 @@ func (h *NikkiHandler) CreateNikki(w http.ResponseWriter, r *http.Request) {
 	/* ******* */
 
 	/* handler service呼び出し */
-	nikki,err :=h.Service.CreateNikki(request.UserId,request.Date,request.Title,request.Content)
-	if err != nil{
+	nikki, err := h.Service.CreateNikki(request.UserId, request.Date, request.Title, request.Content)
+	if err != nil {
 		fmt.Println(err)
-	}else{
+	} else {
 		fmt.Println("succused call Service.StoreNewUser")
 	}
 	/* ******* */
 
 	/* Presenter */
-	json_nikki,err := json.Marshal(nikki)
+	json_nikki, err := json.Marshal(nikki)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -89,10 +103,10 @@ func (h *NikkiHandler) CreateNikki(w http.ResponseWriter, r *http.Request) {
 func (h *NikkiHandler) EditNikki(w http.ResponseWriter, r *http.Request) {
 	/* handler マッピング*/
 	type Request struct {
-		UserId  int     `json:"UserId"`
-		Date    int 	`json:"Date"`
-		Content string  `json:"Content"`
-		Title   string 	`json:"Title"`
+		UserId  int    `json:"UserId"`
+		Date    int    `json:"Date"`
+		Content string `json:"Content"`
+		Title   string `json:"Title"`
 	}
 	decoder := json.NewDecoder(r.Body)
 	request := new(Request)
@@ -102,13 +116,13 @@ func (h *NikkiHandler) EditNikki(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println(request)
 	/* ******* */
-	h.Service.EditNikki(request.UserId,request.Date,request.Title,request.Content)
+	h.Service.EditNikki(request.UserId, request.Date, request.Title, request.Content)
 }
-func (h *NikkiHandler) DeleteNikki(w http.ResponseWriter, r *http.Request){
+func (h *NikkiHandler) DeleteNikki(w http.ResponseWriter, r *http.Request) {
 	/* handler マッピング*/
 	type Request struct {
-		UserId  int     `json:"UserId"`
-		Date    int 	`json:"Date"`
+		UserId int `json:"UserId"`
+		Date   int `json:"Date"`
 	}
 	decoder := json.NewDecoder(r.Body)
 	request := new(Request)
@@ -119,11 +133,11 @@ func (h *NikkiHandler) DeleteNikki(w http.ResponseWriter, r *http.Request){
 	log.Println(request)
 	/* ******* */
 	/* service 呼び出し */
-	confirmDelete := h.Service.DeleteNikki(request.UserId,request.Date)
+	confirmDelete := h.Service.DeleteNikki(request.UserId, request.Date)
 	fmt.Println(confirmDelete)
 	/* ******* */
 	/* Presenter */
-	json_confirmDelete,err := json.Marshal(confirmDelete)
+	json_confirmDelete, err := json.Marshal(confirmDelete)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -132,4 +146,3 @@ func (h *NikkiHandler) DeleteNikki(w http.ResponseWriter, r *http.Request){
 	w.Write(json_confirmDelete)
 	/* ******* */
 }
-
