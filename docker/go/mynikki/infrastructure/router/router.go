@@ -37,7 +37,7 @@ func Init() {
 
 	router.HandleFunc("/nikkis", nikkiHandler.Index).Methods("GET")
 	router.HandleFunc("/nikki", nikkiHandler.CreateNikki).Methods("POST")
-	router.HandleFunc("/nikki/{userId}/{date}", nikkiHandler.GetNikki).Methods("GET")
+	router.HandleFunc("/nikki/{userID}/{date}", nikkiHandler.GetNikki).Methods("GET")
 	router.HandleFunc("/nikki/delete", nikkiHandler.DeleteNikki).Methods("POST")
 	router.HandleFunc("/nikki/edit", nikkiHandler.EditNikki).Methods("POST")
 

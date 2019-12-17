@@ -1,12 +1,13 @@
 package entities
 
 type Nikki struct {
-	ID      int
-	UserID int
-	Date    int
-	Title   string
-	Content string
-	Photos  Photos
+	ID             int
+	UserID         int
+	Date           int
+	Title          string
+	Content        string
+	NumberOfPhotos int
+	Photos         Photos
 }
 
 type Nikkis []Nikki

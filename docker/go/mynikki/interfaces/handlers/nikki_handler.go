@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
+	"strconv"
 	// "go_docker/mynikki/entities"
 	"github.com/gorilla/mux"
 	"go_docker/mynikki/infrastructure/database"
@@ -53,18 +53,32 @@ func (h *NikkiHandler) Index(w http.ResponseWriter, r *http.Request) {
 
 func (h *NikkiHandler) GetNikki(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r) //パスパラメータ取得
-	fmt.Println(vars["userId"])
+	fmt.Println("userID : " + vars["userID"])
+	fmt.Println("date : " + vars["date"])
+	userID, _ := strconv.Atoi(vars["userID"])
+	date, _ := strconv.Atoi(vars["date"])
 	/* handler call service  */
-	h.Service.GetNikki(1, 1)
+	nikki, err := h.Service.GetNikki(userID, date)
 	/* ************ */
+	/* presenter */
+	// users構造体 → json変換
+	json_nikki, err := json.Marshal(nikki)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(json_nikki)
+	/* ********* */
 }
 func (h *NikkiHandler) RegisterPhoto(w http.ResponseWriter, r *http.Request) {
 	/* handler マッピング*/
 	type Request struct {
-		NikkiId  int    `json:"NikkiId"`
+		NikkiId int    `json:"NikkiId"`
 		UserId  int    `json:"UserId"`
 		Date    int    `json:"Date"`
-		PhotoID int `json:"PhotoID"`
+		PhotoID int    `json:"PhotoID"`
 		Photo   string `json:"Photo"`
 	}
 	decoder := json.NewDecoder(r.Body)
@@ -76,17 +90,18 @@ func (h *NikkiHandler) RegisterPhoto(w http.ResponseWriter, r *http.Request) {
 	log.Println(request)
 	/* ******* */
 	/* handler call service  */
-	h.Service.RegisterPhoto(request.NikkiId,request.UserId,request.Date,request.PhotoID,request.Photo)
+	h.Service.RegisterPhoto(request.NikkiId, request.UserId, request.Date, request.PhotoID, request.Photo)
 	/* ************ */
 }
 
 func (h *NikkiHandler) CreateNikki(w http.ResponseWriter, r *http.Request) {
 	/* handler マッピング*/
 	type Request struct {
-		UserId  int    `json:"UserId"`
-		Date    int    `json:"Date"`
-		Content string `json:"Content"`
-		Title   string `json:"Title"`
+		UserId         int    `json:"UserId"`
+		Date           int    `json:"Date"`
+		Content        string `json:"Content"`
+		Title          string `json:"Title"`
+		NumberOfPhotos int    `json:"NumberOfPhotos"`
 	}
 	decoder := json.NewDecoder(r.Body)
 	request := new(Request)
@@ -98,7 +113,7 @@ func (h *NikkiHandler) CreateNikki(w http.ResponseWriter, r *http.Request) {
 	/* ******* */
 
 	/* handler service呼び出し */
-	nikki, err := h.Service.CreateNikki(request.UserId, request.Date, request.Title, request.Content)
+	nikki, err := h.Service.CreateNikki(request.UserId, request.Date, request.Title, request.Content, request.NumberOfPhotos)
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -162,6 +177,7 @@ func (h *NikkiHandler) DeleteNikki(w http.ResponseWriter, r *http.Request) {
 	w.Write(json_confirmDelete)
 	/* ******* */
 }
+
 // func (h *NikkiHandler) GetAllPhotos(w http.ResponseWriter, r *http.Request) {
 // 	/* handler call service  */
 // 	h.Service.GetAllPhotos()

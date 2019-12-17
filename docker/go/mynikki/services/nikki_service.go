@@ -7,12 +7,12 @@ import (
 
 type NikkiRepository interface {
 	FindAll() (entities.Nikkis, error)
-	GetNikki(int, int)
+	FindNikki(int, int) (entities.Nikki, error)
 	CreateNikki(int, int, string, string, int) (entities.Nikki, error)
 	DeleteNikki(int, int) (int, int, int, error)
 	EditNikki(int, int, string, string)
-	InsertPhoto(int, int,int, int,string)
-	// FindAllPhotos()
+	InsertPhoto(int, int, int, int, string)
+	FindPhotos(int, int) (entities.Photos, error)
 }
 type NikkiService struct {
 	NikkiRepository NikkiRepository
@@ -37,8 +37,8 @@ func (n *NikkiService) GetAll() (entities.Nikkis, error) {
 	return nikkis, err
 }
 
-func (n *NikkiService) CreateNikki(UserId int, Date int, Title string, Content string) (entities.Nikki, error) {
-	nikki, err := n.NikkiRepository.CreateNikki(UserId, Date, Title, Content, 3)
+func (n *NikkiService) CreateNikki(UserId int, Date int, Title string, Content string, NumberOfPhotos int) (entities.Nikki, error) {
+	nikki, err := n.NikkiRepository.CreateNikki(UserId, Date, Title, Content, NumberOfPhotos)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -50,22 +50,37 @@ func (n *NikkiService) EditNikki(UserId int, Date int, Title string, Content str
 	n.NikkiRepository.EditNikki(UserId, Date, Title, Content)
 }
 
-func (n *NikkiService) DeleteNikki(UserId int, Date int) *ConfirmDelete {
+func (n *NikkiService) DeleteNikki(UserID int, Date int) *ConfirmDelete {
 
 	ConfirmDelete := new(ConfirmDelete)
-	ConfirmDelete.UserId, ConfirmDelete.Date, ConfirmDelete.RowsAffect, ConfirmDelete.Err = n.NikkiRepository.DeleteNikki(UserId, Date)
+	ConfirmDelete.UserId, ConfirmDelete.Date, ConfirmDelete.RowsAffect, ConfirmDelete.Err = n.NikkiRepository.DeleteNikki(UserID, Date)
 	if ConfirmDelete.Err != nil {
 		fmt.Println(ConfirmDelete.Err)
 	}
 	return ConfirmDelete
 }
 
-func (n *NikkiService) GetNikki(UserId int, Date int) {
-	n.NikkiRepository.GetNikki(1, 20191211)
+func (n *NikkiService) GetNikki(UserID int, Date int) (entities.Nikki, error) {
+	nikki, err := n.NikkiRepository.FindNikki(UserID, Date)
+	if err != nil {
+		fmt.Println(err)
+		//ここでreturnして止める
+	}
+	if nikki.ID == 0 {
+		fmt.Println("日記は存在しません")
+		//ここでreturnして止める
+	}
+	if nikki.NumberOfPhotos != 0 {
+		fmt.Println("写真が存在")
+		photos, err := n.NikkiRepository.FindPhotos(nikki.ID, nikki.NumberOfPhotos)
+		nikki.Photos = photos
+		return nikki, err
+	}
+	return nikki, nil
 }
 
-func (n *NikkiService) RegisterPhoto(NikkiID int,UserID int, Date int ,PhotoID int, Photo string) {
-	n.NikkiRepository.InsertPhoto(NikkiID,UserID,Date,PhotoID,Photo)
+func (n *NikkiService) RegisterPhoto(NikkiID int, UserID int, Date int, PhotoID int, Photo string) {
+	n.NikkiRepository.InsertPhoto(NikkiID, UserID, Date, PhotoID, Photo)
 }
 
 // func (n *NikkiService) GetAllPhotos() {
