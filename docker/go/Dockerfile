@@ -9,6 +9,7 @@ RUN go get github.com/go-sql-driver/mysql;
 RUN go get github.com/gorilla/mux;
 RUN go get -v github.com/rubenv/sql-migrate/... 
 RUN go get github.com/DATA-DOG/go-sqlmock
+RUN go get github.com/gorilla/handlers
 RUN ["apt-get", "update"]
 RUN ["apt-get", "install", "-y", "vim"]
 

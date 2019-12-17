@@ -47,7 +47,6 @@ func (repo *NikkiRepository) FindAll() (entities.Nikkis, error) {
 	}
 	return nikkis, nil
 }
-
 func (repo *NikkiRepository) FindNikki(UserId int, Date int) (entities.Nikki, error) {
 	var nikkis_table_colum Nikkis_table
 	var nikki entities.Nikki
@@ -183,7 +182,6 @@ func (repo *NikkiRepository) EditNikki(UserId int, Date int, Title string, Conte
 		fmt.Println("DB table エラー") //削除データが2個以上は起らないはず
 	}
 }
-
 func (repo *NikkiRepository) InsertPhoto(NikkiId int, UserId int, Date int, PhotoId int, Photo string) {
 	fmt.Println("RegisterPhoto")
 	statement := "INSERT INTO photos(nikki_id,user_id,date,photo_id,photo) VALUES(?,?,?,?,?)"

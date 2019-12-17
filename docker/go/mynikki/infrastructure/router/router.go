@@ -11,13 +11,33 @@ import (
 	"go_docker/mynikki/interfaces/handlers"
 
 	"github.com/gorilla/mux"
+	gorillaHundler "github.com/gorilla/handlers"
+	// "github.com/ant0ine/go-json-rest/rest"
 )
 
 func Init() {
 	router := mux.NewRouter()
-
 	DBhandler := database.NewSqlHandler()
+	cors := gorillaHundler.CORS(
+		gorillaHundler.AllowedHeaders([]string{"content-type"}),
+		gorillaHundler.AllowedOrigins([]string{"*"}),
+		gorillaHundler.AllowCredentials(),
+	)
 
+	router.Use(cors)
+	// api := rest.NewApi()
+    // api.Use(rest.DefaultDevStack...)
+    // api.Use(&rest.CorsMiddleware{
+    //     RejectNonCorsRequests: false,
+    //     OriginValidator: func(origin string, request *rest.Request) bool {
+    //         return origin == true
+    //     },
+    //     AllowedMethods: []string{"GET", "POST", "PUT"},
+    //     AllowedHeaders: []string{
+    //         "Accept", "Content-Type", "X-Custom-Header", "Origin"},
+    //     AccessControlAllowCredentials: true,
+    //     AccessControlMaxAge:           3600,
+    // })
 	// MockDBhandler := database.NewMockDbHandler()
 	// sss,err:=MockDBhandler.DB.Exec("SELECT * FROM students")
 	// fmt.Println(sss)
