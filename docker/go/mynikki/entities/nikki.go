@@ -1,8 +1,8 @@
 package entities
 
 type Nikki struct {
-	Id      int
-	User_id int
+	ID      int
+	UserID int
 	Date    int
 	Title   string
 	Content string
@@ -12,7 +12,7 @@ type Nikki struct {
 type Nikkis []Nikki
 
 type Photo struct {
-	Id    int
+	ID    int
 	Photo string
 }
 type Photos []Photo

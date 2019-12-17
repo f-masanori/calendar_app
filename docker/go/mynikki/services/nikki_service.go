@@ -11,7 +11,8 @@ type NikkiRepository interface {
 	CreateNikki(int, int, string, string, int) (entities.Nikki, error)
 	DeleteNikki(int, int) (int, int, int, error)
 	EditNikki(int, int, string, string)
-	RegisterPhoto()
+	InsertPhoto(int, int,int, int,string)
+	// FindAllPhotos()
 }
 type NikkiService struct {
 	NikkiRepository NikkiRepository
@@ -63,6 +64,10 @@ func (n *NikkiService) GetNikki(UserId int, Date int) {
 	n.NikkiRepository.GetNikki(1, 20191211)
 }
 
-func (n *NikkiService) RegisterPhoto(UserId int, Date int) {
-	n.NikkiRepository.RegisterPhoto()
+func (n *NikkiService) RegisterPhoto(NikkiID int,UserID int, Date int ,PhotoID int, Photo string) {
+	n.NikkiRepository.InsertPhoto(NikkiID,UserID,Date,PhotoID,Photo)
 }
+
+// func (n *NikkiService) GetAllPhotos() {
+// 	n.NikkiRepository.FindAllPhotos()
+// }

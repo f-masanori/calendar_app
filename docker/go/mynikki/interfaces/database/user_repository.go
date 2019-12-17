@@ -25,20 +25,20 @@ func (repo *UserRepository) FindAll() (entities.Users, error) {
 	defer rows.Close() // make sure rows is closed when the handler exits
 	defer fmt.Println("どこで終了かの確認")
 	// type users_table struct {
-	// 	Id         int    `db:"id"`
+	// 	IS         int    `db:"id"`
 	// 	Name       string `db:"name"`
-	// 	Created_at string `db:"created_at"`
-	// 	Updated_at string `db:"updated_at"`
+	// 	CreatedAt string `db:"CreatedAt"`
+	// 	UpdatedAt string `db:"updated_at"`
 	// }
 	var users_table_colum Users_table
 	for rows.Next() {
 		var user entities.User
-		err := rows.Scan(&users_table_colum.Id, &users_table_colum.Name, &users_table_colum.Created_at, &users_table_colum.Updated_at)
+		err := rows.Scan(&users_table_colum.ID, &users_table_colum.Name, &users_table_colum.CreatedAt, &users_table_colum.UpdatedAt)
 		if err != nil {
 			fmt.Println(err)
 			panic(err.Error())
 		}
-		user.Id = users_table_colum.Id
+		user.ID = users_table_colum.ID
 		user.Name = users_table_colum.Name
 		users = append(users, user)
 	}
@@ -61,7 +61,7 @@ func (repo *UserRepository) CreateUser(name string) (entities.User, error) {
 		return user, err
 	}
 	lastInsertID, err := result.LastInsertId()
-	user.Id = int(lastInsertID)
+	user.ID = int(lastInsertID)
 	user.Name = name
 	return user, nil
 }
@@ -98,9 +98,9 @@ func (repo *UserRepository) DeleteUser(id int) (int, error) {
 
 	rowsAffect := int(rowsAffect_int64)
 	if rowsAffect == 0 {
-		fmt.Println("User id = " + strconv.Itoa(id) + " は存在しません")
+		fmt.Println("UserID= " + strconv.Itoa(id) + " は存在しません")
 	} else if rowsAffect == 1 {
-		fmt.Println("User id = " + strconv.Itoa(id) + " 削除")
+		fmt.Println("UserID = " + strconv.Itoa(id) + " 削除")
 	} else {
 		fmt.Println("DBエラー")
 		fmt.Println("_rowsAffect" + strconv.Itoa(rowsAffect))

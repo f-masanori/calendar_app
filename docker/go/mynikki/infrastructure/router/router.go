@@ -41,6 +41,8 @@ func Init() {
 	router.HandleFunc("/nikki/delete", nikkiHandler.DeleteNikki).Methods("POST")
 	router.HandleFunc("/nikki/edit", nikkiHandler.EditNikki).Methods("POST")
 
+	router.HandleFunc("/registerphoto", nikkiHandler.RegisterPhoto).Methods("POST")
+
 	router.HandleFunc("/users", userHandler.Index).Methods("GET")
 	router.HandleFunc("/test", userHandler.Test).Methods("GET")
 	router.HandleFunc("/testauth", Authentication.AuthMiddleware(userHandler.Index)).Methods("GET")

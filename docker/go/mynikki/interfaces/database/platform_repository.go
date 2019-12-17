@@ -11,7 +11,7 @@ type PlatformRepository struct {
 
 func (repo *PlatformRepository) Create(int) (entities.Platform, error) {
 	var platform entities.Platform
-	platform.Id = 2
+	platform.ID = 2
 	platform.Platform = 2
 	return platform, nil
 }

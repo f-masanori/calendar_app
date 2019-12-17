@@ -6,6 +6,6 @@ var Platform_map map[string]int = map[string]int{
 	"web":     2}
 
 type Platform struct {
-	Id       int
+	ID       int
 	Platform int
 }

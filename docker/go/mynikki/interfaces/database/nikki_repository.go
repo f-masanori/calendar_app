@@ -25,20 +25,20 @@ func (repo *NikkiRepository) FindAll() (entities.Nikkis, error) {
 	for rows.Next() {
 		var nikki entities.Nikki
 		err := rows.Scan(
-			&nikkis_table_colum.Id,
-			&nikkis_table_colum.User_id,
+			&nikkis_table_colum.ID,
+			&nikkis_table_colum.UserID,
 			&nikkis_table_colum.Date,
 			&nikkis_table_colum.Title,
 			&nikkis_table_colum.Content,
 			&nikkis_table_colum.NumberOfPhotos,
-			&nikkis_table_colum.Created_at,
-			&nikkis_table_colum.Updated_at)
+			&nikkis_table_colum.CreatedAt,
+			&nikkis_table_colum.UpdatedAt)
 		if err != nil {
 			fmt.Println(err)
 			panic(err.Error())
 		}
-		nikki.Id = nikkis_table_colum.Id
-		nikki.User_id = nikkis_table_colum.User_id
+		nikki.ID = nikkis_table_colum.ID
+		nikki.UserID = nikkis_table_colum.UserID
 		nikki.Title = nikkis_table_colum.Title
 		nikki.Date = nikkis_table_colum.Date
 		nikki.Content = nikkis_table_colum.Content
@@ -58,39 +58,39 @@ func (repo *NikkiRepository) GetNikki(UserId int, Date int) {
 	}
 	for rows.Next() {
 		err := rows.Scan(
-			&nikkis_table_colum.Id,
-			&nikkis_table_colum.User_id,
+			&nikkis_table_colum.ID,
+			&nikkis_table_colum.UserID,
 			&nikkis_table_colum.Date,
 			&nikkis_table_colum.Title,
 			&nikkis_table_colum.Content,
 			&nikkis_table_colum.NumberOfPhotos,
-			&nikkis_table_colum.Created_at,
-			&nikkis_table_colum.Updated_at)
+			&nikkis_table_colum.CreatedAt,
+			&nikkis_table_colum.UpdatedAt)
 		if err != nil {
 			fmt.Println(err)
 			panic(err.Error())
 		}
 		nikkiRecordFlag = true
-		nikki.Id = nikkis_table_colum.Id
-		nikki.User_id = nikkis_table_colum.User_id
+		nikki.ID = nikkis_table_colum.ID
+		nikki.UserID = nikkis_table_colum.UserID
 		nikki.Title = nikkis_table_colum.Title
 		nikki.Date = nikkis_table_colum.Date
 		nikki.Content = nikkis_table_colum.Content
-		fmt.Println("find nikki userId = " + strconv.Itoa(nikkis_table_colum.User_id) + " date = " + strconv.Itoa(nikkis_table_colum.Date))
+		fmt.Println("find nikki userId = " + strconv.Itoa(nikkis_table_colum.UserID) + " date = " + strconv.Itoa(nikkis_table_colum.Date))
 		// nikkis = append(nikkis, nikki)
 	}
 	if nikkiRecordFlag && nikkis_table_colum.NumberOfPhotos != 0 {
 		var Photos entities.Photos
 
 		rows, err := repo.SqlHandler.DB.Query("SELECT id,photo FROM photos WHERE nikki_id = ? LIMIT ?;",
-			 nikkis_table_colum.Id, nikkis_table_colum.NumberOfPhotos)
+			 nikkis_table_colum.ID, nikkis_table_colum.NumberOfPhotos)
 		if err != nil {
 			log.Print("error executing database query: ", err)
 		}
 
 		for rows.Next() {
 			var photo entities.Photo
-			err := rows.Scan(&photo.Id, &photo.Photo)
+			err := rows.Scan(&photo.ID, &photo.Photo)
 			if err != nil {
 				fmt.Println(err)
 				panic(err.Error())
@@ -101,29 +101,19 @@ func (repo *NikkiRepository) GetNikki(UserId int, Date int) {
 	}
 	// err := repo.SqlHandler.DB.QueryRow("SELECT * FROM nikkis WHERE user_id = ? and date = ? LIMIT 1;", UserId, Date).Scan(
 	// 		&nikkis_table_colum.Id,
-	// 		&nikkis_table_colum.User_id,
+	// 		&nikkis_table_colum.UserID,
 	// 		&nikkis_table_colum.Date,
 	// 		&nikkis_table_colum.Title,
 	// 		&nikkis_table_colum.Content,
 	// 		&nikkis_table_colum.NumberOfPhotos,
-	// 		&nikkis_table_colum.Created_at,
-	// 		&nikkis_table_colum.Updated_at)
+	// 		&nikkis_table_colum.CreatedAt,
+	// 		&nikkis_table_colum.UpdatedAt)
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
 	fmt.Println(nikki)
 	fmt.Println(nikkis_table_colum)
 }
-
-// func (repo *NikkiRepository) DeleteNikki()  {
-// 	var nikki entities.Nikki
-// 	statement := "DELETE FROM nikkis WHERE id = ?"
-// 	stmtInsert, err := repo.SqlHandler.DB.Prepare(statement)
-// 	if err != nil {
-// 		fmt.Println("Prepare(statement) error")
-// 		return nikki, err
-// 	}
-// }
 func (repo *NikkiRepository) CreateNikki(UserId int, Date int, Title string, Content string, NumberOfPhotos int) (entities.Nikki, error) {
 	var nikki entities.Nikki
 	statement := "INSERT INTO nikkis(user_id,date,title,content,number_of_photos) VALUES(?,?,?,?,?)"
@@ -141,7 +131,7 @@ func (repo *NikkiRepository) CreateNikki(UserId int, Date int, Title string, Con
 	}
 	lastInsertID, err := result.LastInsertId()
 
-	err = repo.SqlHandler.DB.QueryRow("SELECT id,user_id,date,title,content FROM nikkis WHERE id = ?", lastInsertID).Scan(&nikki.Id, &nikki.User_id,
+	err = repo.SqlHandler.DB.QueryRow("SELECT id,user_id,date,title,content FROM nikkis WHERE id = ?", lastInsertID).Scan(&nikki.ID, &nikki.UserID,
 		&nikki.Date, &nikki.Title, &nikki.Content)
 	if err != nil {
 		log.Fatal(err)
@@ -149,14 +139,14 @@ func (repo *NikkiRepository) CreateNikki(UserId int, Date int, Title string, Con
 
 	return nikki, nil
 }
-func (repo *NikkiRepository) DeleteNikki(UserId int, Date int) (int, int, int, error) {
+func (repo *NikkiRepository) DeleteNikki(UserID int, Date int) (int, int, int, error) {
 	stmtDelete, err := repo.SqlHandler.DB.Prepare("DELETE FROM nikkis WHERE user_id = ? and date = ?")
 	if err != nil {
 		panic(err.Error())
 	}
 	defer stmtDelete.Close()
 
-	result, err := stmtDelete.Exec(UserId, Date)
+	result, err := stmtDelete.Exec(UserID, Date)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -174,7 +164,7 @@ func (repo *NikkiRepository) DeleteNikki(UserId int, Date int) (int, int, int, e
 	} else {
 		fmt.Println("DB table エラー") //削除データが2個以上は起らないはず
 	}
-	return UserId, Date, rowsAffect, err
+	return UserID, Date, rowsAffect, err
 }
 func (repo *NikkiRepository) EditNikki(UserId int, Date int, Title string, Content string) {
 	stmtEdit, err := repo.SqlHandler.DB.Prepare("UPDATE nikkis SET title = ?,content = ? WHERE user_id = ? and date = ?")
@@ -202,6 +192,52 @@ func (repo *NikkiRepository) EditNikki(UserId int, Date int, Title string, Conte
 	}
 }
 
-func (repo *NikkiRepository) RegisterPhoto(UserId int, Date int) {
+func (repo *NikkiRepository) InsertPhoto(NikkiId int,UserId int, Date int ,PhotoId int, Photo string) {
+	fmt.Println("RegisterPhoto")
+	statement := "INSERT INTO photos(nikki_id,user_id,date,photo_id,photo) VALUES(?,?,?,?,?)"
+	stmtInsert, err := repo.SqlHandler.DB.Prepare(statement)
+	if err != nil {
+		fmt.Println("Prepare(statement) error")
+	}
+	defer stmtInsert.Close()
 
+	res, err := stmtInsert.Exec(NikkiId,UserId, Date, PhotoId, Photo)
+	if err != nil {
+		fmt.Println(res)
+		fmt.Println("stmtInsert.Exec　error")
+	}
 }
+// func (repo *NikkiRepository) FindAllPhotos(){
+// 	var photos entities.Photos
+// 	fmt.Println("FindAllPhotos")
+// 	rows, err := repo.SqlHandler.DB.Query("SELECT * from photos;")
+// 	if err != nil {
+// 		log.Print("error executing database query: ", err)
+// 	}
+// 	defer rows.Close()
+
+// 	var photos_table_colum Photos_table
+// 	for rows.Next() {
+// 		var photo entities.Photo
+// 		err := rows.Scan(
+// 			&photos_table_colum.ID,
+// 			&photos_table_colum.NikkiID,
+// 			&photos_table_colum.UserID,
+// 			&photos_table_colum.Date,
+// 			&photos_table_colum.PhotoId,
+// 			&photos_table_colum.Photo,
+// 			&photos_table_colum.CreatedAt,
+// 			&photos_table_colum.UpdatedAt)
+// 		if err != nil {
+// 			fmt.Println(err)
+// 			panic(err.Error())
+// 		}
+// 		nikki.ID = nikkis_table_colum.ID
+// 		nikki.UserID = nikkis_table_colum.UserID
+// 		nikki.Title = nikkis_table_colum.Title
+// 		nikki.Date = nikkis_table_colum.Date
+// 		nikki.Content = nikkis_table_colum.Content
+// 		nikkis = append(nikkis, nikki)
+// 	}
+// 	return nikkis, nil
+// }

@@ -42,13 +42,13 @@ func (s *UserService) StoreNewUser(name string) (entities.User, error) {
 	if err != nil {
 		fmt.Println(err)
 	} else {
-		fmt.Println("Created New user id=" + strconv.Itoa(user.Id) + " name=" + user.Name)
+		fmt.Println("Created New user ID=" + strconv.Itoa(user.ID) + " name=" + user.Name)
 	}
 	return user, err
 }
-func (s *UserService) DeleteUser(id int) int {
+func (s *UserService) DeleteUser(ID int) int {
 	fmt.Println("DeleteUser")
-	returnId, err := s.UserRepository.DeleteUser(id)
+	returnId, err := s.UserRepository.DeleteUser(ID)
 	fmt.Println(err)
 	return returnId
 }

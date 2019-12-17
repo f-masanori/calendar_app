@@ -59,8 +59,24 @@ func (h *NikkiHandler) GetNikki(w http.ResponseWriter, r *http.Request) {
 	/* ************ */
 }
 func (h *NikkiHandler) RegisterPhoto(w http.ResponseWriter, r *http.Request) {
+	/* handler マッピング*/
+	type Request struct {
+		NikkiId  int    `json:"NikkiId"`
+		UserId  int    `json:"UserId"`
+		Date    int    `json:"Date"`
+		PhotoID int `json:"PhotoID"`
+		Photo   string `json:"Photo"`
+	}
+	decoder := json.NewDecoder(r.Body)
+	request := new(Request)
+	err := decoder.Decode(&request)
+	if err != nil {
+		panic(err)
+	}
+	log.Println(request)
+	/* ******* */
 	/* handler call service  */
-	h.Service.GetNikki()
+	h.Service.RegisterPhoto(request.NikkiId,request.UserId,request.Date,request.PhotoID,request.Photo)
 	/* ************ */
 }
 
@@ -146,3 +162,8 @@ func (h *NikkiHandler) DeleteNikki(w http.ResponseWriter, r *http.Request) {
 	w.Write(json_confirmDelete)
 	/* ******* */
 }
+// func (h *NikkiHandler) GetAllPhotos(w http.ResponseWriter, r *http.Request) {
+// 	/* handler call service  */
+// 	h.Service.GetAllPhotos()
+// 	/* ************ */
+// }
