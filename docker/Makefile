@@ -1,0 +1,2 @@
+dcu:
+	docker-compose up

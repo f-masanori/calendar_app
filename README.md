@@ -1,11 +1,13 @@
-# mynikki_dev
-
+# calender_app
+- もともと、インターン先で開発していた予定表アプリでしたが、サーバーレスになることが決定し自分の著作になりました。上司からのアドバイス等を頂きながら、１から自分で開発しました。
+- モバイルアプリを対象とした開発だったため、APIサーバーとして開発しています。
+- Docker上で開発をしており、クリーンアーキテクチャっぽい？アーキテクチャにしています。
 ## 開発環境
 - mac mojave 10.14.6
 - Docker version 19.03.4
 - docker-compose version 1.24.1
 ## 実行
-- /mynikki_dev/docker 内で docker-compose up
+- /docker 内で docker-compose up
 - ポート8080
 ## API 
 - /users (GET)
@@ -30,8 +32,6 @@
 
 ## DB 
 
-
-
 ##### 動いてるコンテナへの入り方
 - $ docker exec -i -t コンテナ名 bash
 ##### 動いているコンテナ内でのコマンドの実行
@@ -39,7 +39,6 @@
   - このようにすれば、コンテナ内のどこのディレクトリ内でもコマンドの実行ができる
 ### DB migration
 - sql-migrateを使用
-
   -  https://github.com/rubenv/sql-migrate
 - 参考
 
@@ -62,7 +61,11 @@
     - migrationのroll back(ロールバック)
       - $ sql-migrate down
     - migrationの実行状態確認
-      -  $ sql-migrate status
+      - $ sql-migrate status
+### DB seedについて
+- DBにテストデータを入れるために作成した
+- 詳しくはコードを読む
+
 ##### mysql接続
 - $ mysql -u root -p 
 - $ mysql -h 127.0.0.1 -P 3306 -u root -p mysql ローカルからの入り方
@@ -82,7 +85,6 @@
 - $ docker-compose up → image・コンテナの構築& コンテナの起動
 
 #### アーキテクチャメモ
-
 - クリーンアーキテクチャ使用(正しい構成なのかはわからない)
 
 - infrastructure/router で ルーティング
