@@ -1,9 +1,11 @@
 package router
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	// "os"
 
@@ -12,7 +14,9 @@ import (
 	"go_docker/calender/interfaces/handlers"
 
 	// gorillaHundler "github.com/gorilla/handlers"
+	firebase "firebase.google.com/go"
 	"github.com/gorilla/mux"
+	"google.golang.org/api/option"
 )
 
 // CORS Middleware
@@ -32,17 +36,43 @@ func CORS(next http.Handler) http.Handler {
 	})
 }
 func loginController(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.Body)
-	wweew := r.Header.Get("token")
-	fmt.Println(wweew)
+	opt := option.WithCredentialsFile("./calender-9275a-firebase-adminsdk-c09d7-691abcc199.json")
+	// fmt.Print(opt)
+	app, err := firebase.NewApp(context.Background(), nil, opt)
+	if err != nil {
+		// return nil, fmt.Errorf("error initializing app: %v", err)
+	}
+	// fmt.Print(app)
+	// // // Access auth service from the default app
+	auth, err := app.Auth(context.Background())
+	if err != nil {
+		log.Fatalf("error getting Auth client: %v\n", err)
+	}
+	authHeader := r.Header.Get("Authorization")
+
+	idToken := strings.Replace(authHeader, "Bearer ", "", 1)
+	// fmt.Println(r.Body)
+
+	// // JWT の検証
+	token, err := auth.VerifyIDToken(context.Background(), idToken)
+	if err != nil {
+
+		u := fmt.Sprintf("error verifying ID token: %v\n", err)
+		fmt.Print(u)
+		// return c.JSON(http.StatusBadRequest, u)
+	}
+	uid := token.Claims["user_id"]
+	fmt.Println(uid)
 }
 func Init() {
+
 	router := mux.NewRouter()
 	DBhandler := database.NewSqlHandler()
 	router.Use(CORS)
 	nikkiHandler := handlers.NewNikkiHandler(DBhandler)
 	userHandler := handlers.NewUserHandler(DBhandler)
 	platformHandler := handlers.NewPlatformHandler(DBhandler)
+	eventHandler := handlers.NewEventHandler(DBhandler)
 	router.HandleFunc("/login", loginController)
 	router.HandleFunc("/nikkis", nikkiHandler.Index).Methods("GET")
 	router.HandleFunc("/nikki", nikkiHandler.CreateNikki).Methods("POST")
@@ -58,7 +88,9 @@ func Init() {
 	router.HandleFunc("/user", userHandler.NewUser).Methods("POST")
 	router.HandleFunc("/user/delete", userHandler.DeleteUser).Methods("POST")
 	// router.HandleFunc("/addEvent", nikkiHandler.AddEvent).Methods("POST")
-	router.HandleFunc("/addEvent", nikkiHandler.AddEvent)
+	// router.HandleFunc("/addEvent", Authentication.AuthMiddleware(nikkiHandler.AddEvent))
+	router.HandleFunc("/addEvent", Authentication.AuthMiddleware(eventHandler.AddEvent))
+
 	/* userHandler.Userdelete で指定idのユーザーを削除したい */
 	// router.HandleFunc("/user/delete/:id", userHandler.UserDelete).Methods("POST")
 	/* userHandler.Userinfo　でそのユーザーに紐づけられているdevice、認証などの情報を取得したい(未実装) */

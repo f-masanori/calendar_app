@@ -135,7 +135,7 @@ ______
 
 - database/ sql 
 
-  -  Query と Exec に分けて考えます。 Query は副作用のない `SELECT`、Exec は副作用のある `INSERT` や、`UPDATE`、`DELETE` に当たります。
+  -  Query と Exec に分けて考える。 Query は副作用のない `SELECT`、Exec は副作用のある `INSERT` や、`UPDATE`、`DELETE` に当たる
   - トランザクションにてprepareを使うときは少し気をつけるhttps://precure-3dprinter.hatenablog.jp/entry/2018/11/22/Golang%E3%81%A7%E3%83%88%E3%83%A9%E3%83%B3%E3%82%B6%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%92%E4%BD%BF%E3%81%86%E8%A9%B1](https://precure-3dprinter.hatenablog.jp/entry/2018/11/22/Golangでトランザクションを使う話)
   - トランザクションの冗長さを無くせるらしいhttps://qiita.com/miya-masa/items/316256924a1f0d7374bb
 
@@ -161,7 +161,24 @@ ______
 
 ______
 
+- go の型情報取得
+  
+  - import("reflect")して
+    
+  - ```go
+    fmt.Println(reflect.TypeOf(調べたい型)) 
+    ```
+  
+  
+  
+  
+  
+  _____
+  
+  
+  
 - docker上で開発する際にローカルのVScodeでコードの編集をしてもvscodeの拡張機能のフォーマッタが機能しないことがよくある
+  
   - そのためターミナルで　gofmt -s -w ./ これでその配下にあるgoファイルを全て整形して保存してくれる
   - https://qiita.com/suin/items/9f9bdaa0cb9cb80cf752
 

@@ -1,12 +1,51 @@
 package firebaseauth
 
 import (
+	// "context"
+	"fmt"
 	"log"
 	"net/http"
+
+	firebase "firebase.google.com/go"
+	"golang.org/x/net/context"
+	"google.golang.org/api/option"
 )
+
+// var UID = ""
 
 func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+
+		opt := option.WithCredentialsFile("./calender-9275a-firebase-adminsdk-c09d7-691abcc199.json")
+		fmt.Print(opt)
+		app, err := firebase.NewApp(context.Background(), nil, opt)
+		if err != nil {
+			fmt.Errorf("error initializing app: %v", err)
+			// return nil, fmt.Errorf("error initializing app: %v", err)
+		}
+		fmt.Print(app)
+		// // // Access auth service from the default app
+		// auth, err := app.Auth(context.Background())
+		// if err != nil {
+		// 	log.Fatalf("error getting Auth client: %v\n", err)
+		// }
+		// authHeader := r.Header.Get("Authorization")
+
+		// idToken := strings.Replace(authHeader, "Bearer ", "", 1)
+		// fmt.Println(r.Body)
+
+		// // JWT の検証
+		// token, err := auth.VerifyIDToken(context.Background(), idToken)
+		// if err != nil {
+
+		// 	u := fmt.Sprintf("error verifying ID token: %v\n", err)
+		// 	fmt.Print(u)
+		// 	// return c.JSON(http.StatusBadRequest, u)
+		// }
+		// fmt.Print(token)
+		// uid := token.Claims["user_id"]
+		// fmt.Println(uid)
+
 		// Firebase SDK のセットアップ
 		// opt := option.WithCredentialsFile(os.Getenv("CREDENTIALS"))
 		// app, err := firebase.NewApp(context.Background(), nil, opt)
