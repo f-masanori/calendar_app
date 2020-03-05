@@ -177,6 +177,18 @@ func (h *NikkiHandler) DeleteNikki(w http.ResponseWriter, r *http.Request) {
 	w.Write(json_confirmDelete)
 	/* ******* */
 }
+func (h *NikkiHandler) AddEvent(w http.ResponseWriter, r *http.Request) {
+	// decoder := json.NewDecoder(r.Body)
+	fmt.Println(r.Body)
+	fmt.Println(r.Method)
+	wweew := r.Header.Get("token")
+	fmt.Println(wweew)
+	// w.Header().Set("Content-Type", "application/json")
+	// w.Header().Set("Access-Control-Allow-Origin", "*")
+	// w.Header().Set("Access-Control-Allow-Headers", "*")
+	// w.Header().Set("Access-Control-Allow-Headers", "token")
+
+}
 
 // func (h *NikkiHandler) GetAllPhotos(w http.ResponseWriter, r *http.Request) {
 // 	/* handler call service  */

@@ -164,3 +164,5 @@ ______
 - docker上で開発する際にローカルのVScodeでコードの編集をしてもvscodeの拡張機能のフォーマッタが機能しないことがよくある
   - そのためターミナルで　gofmt -s -w ./ これでその配下にあるgoファイルを全て整形して保存してくれる
   - https://qiita.com/suin/items/9f9bdaa0cb9cb80cf752
+
+### dockerメモ
