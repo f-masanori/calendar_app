@@ -1,8 +1,13 @@
 package handlers
 
 import (
+	// "encoding/json"
 
 	// "go_docker/calender/entities"
+	"encoding/json"
+	"fmt"
+	Authentication "go_docker/calender/infrastructure"
+	"log"
 
 	// "fmt"
 	"go_docker/calender/infrastructure/database"
@@ -26,8 +31,48 @@ func NewEventHandler(sqlHandler *database.SqlHandler) *EventHandler {
 }
 
 func (e *EventHandler) AddEvent(w http.ResponseWriter, r *http.Request) {
-	// fmt.Println(e.Body)
-	// fmt.Println(e.Method)
-	// uid := Authentication.UID
-	// e.Service.CreateEvent("UIDDD", 20200322, "llll")
+	type Request struct {
+		Date       string `json:"Date"`
+		InputEvent string `json:"InputEvent"`
+	}
+	decoder := json.NewDecoder(r.Body)
+	// fmt.Println(decoder)
+	request := new(Request)
+	err := decoder.Decode(&request)
+	if err != nil {
+		panic(err)
+	}
+	log.Println(request)
+	// fmt.Println(r.Body)
+	// fmt.Println(r.Method)
+	// uid := Authentication.FirebaseUID
+	e.Service.CreateEvent(Authentication.FirebaseUID, request.Date, request.InputEvent)
+}
+func (e *EventHandler) GetEventsByUID(w http.ResponseWriter, r *http.Request) {
+	// type Request struct {
+	// 	Date       string `json:"Date"`
+	// 	InputEvent string `json:"InputEvent"`
+	// }
+	// decoder := json.NewDecoder(r.Body)
+	// fmt.Println(decoder)
+	// request := new(Request)
+	// err := decoder.Decode(&request)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// log.Println(request)
+	// fmt.Println(r)
+	// fmt.Println(r.FormValue("date"))
+	// uid := Authentication.FirebaseUID
+	Events := e.Service.GetEventsByUID(Authentication.FirebaseUID)
+	fmt.Println(Events)
+
+	jsonEvents, err := json.Marshal(Events)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jsonEvents)
 }

@@ -71,7 +71,7 @@ func Init() {
 	router.Use(CORS)
 	nikkiHandler := handlers.NewNikkiHandler(DBhandler)
 	userHandler := handlers.NewUserHandler(DBhandler)
-	platformHandler := handlers.NewPlatformHandler(DBhandler)
+	// platformHandler := handlers.NewPlatformHandler(DBhandler)
 	eventHandler := handlers.NewEventHandler(DBhandler)
 	router.HandleFunc("/login", loginController)
 	router.HandleFunc("/nikkis", nikkiHandler.Index).Methods("GET")
@@ -87,15 +87,13 @@ func Init() {
 	router.HandleFunc("/testauth", Authentication.AuthMiddleware(userHandler.Index)).Methods("GET")
 	router.HandleFunc("/user", userHandler.NewUser).Methods("POST")
 	router.HandleFunc("/user/delete", userHandler.DeleteUser).Methods("POST")
-	// router.HandleFunc("/addEvent", nikkiHandler.AddEvent).Methods("POST")
-	// router.HandleFunc("/addEvent", Authentication.AuthMiddleware(nikkiHandler.AddEvent))
 	router.HandleFunc("/addEvent", Authentication.AuthMiddleware(eventHandler.AddEvent))
-
+	router.HandleFunc("/getEventsByUID", Authentication.AuthMiddleware(eventHandler.GetEventsByUID))
 	/* userHandler.Userdelete で指定idのユーザーを削除したい */
 	// router.HandleFunc("/user/delete/:id", userHandler.UserDelete).Methods("POST")
 	/* userHandler.Userinfo　でそのユーザーに紐づけられているdevice、認証などの情報を取得したい(未実装) */
 	// router.HandleFunc("/user/:id", userHandler.Userinfo).Methods("GET")
-	router.HandleFunc("/initalize", platformHandler.Index).Methods("POST")
+	// router.HandleFunc("/initalize", platformHandler.Index).Methods("POST")
 
 	fmt.Println("Server Start...")
 	log.Fatal(http.ListenAndServe(":8080", router))
