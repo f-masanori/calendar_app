@@ -1,18 +1,13 @@
 package handlers
 
 import (
-	// "encoding/json"
-
-	// "go_docker/calender/entities"
 	"encoding/json"
 	"fmt"
 	Authentication "go_docker/calender/infrastructure"
-	"log"
-
-	// "fmt"
 	"go_docker/calender/infrastructure/database"
 	sqlcmd "go_docker/calender/interfaces/database"
 	"go_docker/calender/services"
+	"log"
 	"net/http"
 )
 

@@ -29,9 +29,9 @@ func (repo *EventRepository) CreateEvent(uid string, date string, event string) 
 }
 
 //今は全部持って来てます
-func (repo *EventRepository) GetEventsByUID(uid string) (entities.Events, error) {
+func (repo *EventRepository) GetEventsByUID(UID string) (entities.Events, error) {
 	var events entities.Events
-	rows, err := repo.SqlHandler.DB.Query("SELECT * from events;")
+	rows, err := repo.SqlHandler.DB.Query("SELECT * from events WHERE UID = ?;", UID)
 	if err != nil {
 		log.Print("error executing database query: ", err)
 	}

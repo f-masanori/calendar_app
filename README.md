@@ -102,25 +102,30 @@
   1. dockerコンテナを立ち上げてexecとかで中に入る
   2. go test -run Get とかでGetと名のつく関数のテストを実行
     - ex)go test -run Get で func TestGetAllSuccessが実行
-#### メモ
-- gitでcommit メッセージを間違えた時
+    - 
+### メモ(Git)
+- commit メッセージを間違えた時
   - git commit --amend -m "書き直しメッセージ"
   - これで直前のcommitしたメッセージを変更できる
   - 参考(https://www.granfairs.com/blog/staff/git-commit-fix)
   
-- gitでcommit を間違えた時
+- commit を間違えた時
   
   - git reset --hard HEAD^ で直前のcommitを削除
   
-- git で commit のログ確認
+-  commit のログ確認
+
+  - git log
+
+- リモートリポジトリ(master)と同期
+
+  - git pull origin master
   
-- git log
-  
-- go modはいづれ導入
+- go modはいづれ導入したい
 
   _________
 
-
+### メモ(Golang)
 - Go で int64 を int に変換するには int という関数を使う。
 
   ```
