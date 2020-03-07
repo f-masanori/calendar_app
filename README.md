@@ -188,3 +188,6 @@ ______
   - https://qiita.com/suin/items/9f9bdaa0cb9cb80cf752
 
 ### dockerメモ
+
+- リアルタイムでログを見る
+  - docker logs -f docker-id
