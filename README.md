@@ -1,44 +1,57 @@
-# calender_app
-- もともと、インターン先で開発していた予定表アプリでしたが、サーバーレスになることが決定し自分の著作になりました。上司からのアドバイス等を頂きながら、１から自分で開発しました。
+# calendar_app
+- もともと、インターン先で開発していた予定表アプリでしたが、サーバーレスになることが決定し自分の著作になりました。上司からのアドバイス等を頂きながら、１から自分で開発しました。現在はreactで開発しているカレンダーアプリの[サーバーサイド](https://github.com/f-masanori/calendar_react)として勉強のため開発を進めています
 - モバイルアプリを対象とした開発だったため、APIサーバーとして開発しています。
 - Docker上で開発をしており、クリーンアーキテクチャっぽい？アーキテクチャにしています。
+- DB(Mysql)もDocker上で動かしています。
+## なぜ
+
+- なぜgolangか
+  - 標準ライブラリだけで、ある程度のサーバー開発ができる
+  - 静的型付け言語である(好み)
+- なぜDockerか
+  - ローカル環境を汚さない
+  - 環境差異の減少(ex VPSレンタルしてから、git cloneからdocker-compose upですぐに立ち上げることができる)
+
 ## 開発環境
 - mac mojave 10.14.6
 - Docker version 19.03.4
 - docker-compose version 1.24.1
 ## 実行
 - /docker 内で docker-compose up
-- ポート8080
-## API 
-- /users (GET)
-    - req : なし
-    - res : usersテーブルから全データを持ってくる(json)
-- /app (POST)
-    - userテーブルのnameを追加
-    - req : json("name")
-      - 例 {"name":"nmasanori"}
-    - res : json("uuid","name")
-    
-- /nikkis (GET)
-    - req : なし
-    - res : nikkisテーブルから全データを持ってくる(json)
-- /nikkis (POST)
-    - req : json("UserId", "Date", "Title", "Content")
-    - res : json("Id", "UserId", "Date", "Title", "Content")
-## DB命名規則
+  - port 8080: calendar app
+  - port 3306: mySQL
 
-- テーブル名 ... 複数形
-- カラム ... 基本単数系
+
+
+##  改善したい部分
+
+- eventの編集・削除のAPIを追加
+
+ ## これから勉強するところ
+
+- Dockerを用いたデプロイ(今は単純に開発環境でデプロイしている)
+- golangの詳しい仕様・標準ライブラリの詳しい仕様
 
 ## DB 
 
-##### 動いてるコンテナへの入り方
-- $ docker exec -i -t コンテナ名 bash
-##### 動いているコンテナ内でのコマンドの実行
-- $ docker exec -i  63b7de01ee21 /bin/bash -c "cd ./dbseedgo && ls"
-  - このようにすれば、コンテナ内のどこのディレクトリ内でもコマンドの実行ができる
-### DB migration
+- #### 命名規則
+  
+  - テーブル名 ... 複数形
+  - カラム ... 基本単数系
+  
+- #### DB seedについて
+
+  - DBにテストデータを入れるために作成した
+  - 詳しくはコードを読む
+  
+- #### mockDBについて
+
+  - ~~go-sqlmock~~
+    - ↑ネット上に参考が少ないため使用しない
+  - https://qiita.com/gold-kou/items/cb174690397f651e2d7f
+## DB migration
 - sql-migrateを使用
+  
   -  https://github.com/rubenv/sql-migrate
 - 参考
 
@@ -62,40 +75,17 @@
       - $ sql-migrate down
     - migrationの実行状態確認
       - $ sql-migrate status
-### DB seedについて
-- DBにテストデータを入れるために作成した
-- 詳しくはコードを読む
+    
+    
 
-##### mysql接続
-- $ mysql -u root -p 
-- $ mysql -h 127.0.0.1 -P 3306 -u root -p mysql ローカルからの入り方
-    - mysqlサーバーに入ってから　env　コマンドで環境変数確認
-    - $ show columns from TABLENAME; テーブル構成確認
-
-- $ mysql -h db -P 3306 -u root -p 違うコンテナからの入りかた
-
-#### 設定
-- ~~mysql_docker/mysql/initdb 内のsqlファイルを初回のみ実行~~
-  - ↑migrationツールを入れるならば必要ない。
-- ~~config.ymlにDBなどの設定を記入(追加したときはconfig.yml,conf.goにそれぞれ追加)~~
-  - ↑構造体に直接記入
-
-##### 二つの違いは？
-- $ docker-compose build → imageの構築
-- $ docker-compose up → image・コンテナの構築& コンテナの起動
-
-#### アーキテクチャメモ
+## アーキテクチャメモ
 - クリーンアーキテクチャ使用(正しい構成なのかはわからない)
 
 - infrastructure/router で ルーティング
 - infrastructure/router の　userHandler := handlers.NewUserHandler(database.NewSqlHandler())　でuserHandlerの実体作成.userHandlerをレシーバーとするメソッドがそれぞれのハンドラー(コントローラ)
 
-#### mockDBについて
-- ~~go-sqlmock~~
-  - ↑ネット上に参考が少ないため使用しない
-- https://qiita.com/gold-kou/items/cb174690397f651e2d7f
 
-### テスト
+## テスト
 ##### 標準パッケージのtestingを使用する
 
 -   Services(アプリケーションロジック)のテスト
@@ -103,7 +93,7 @@
   2. go test -run Get とかでGetと名のつく関数のテストを実行
     - ex)go test -run Get で func TestGetAllSuccessが実行
     - 
-### メモ(Git)
+## メモ(Git)
 - commit メッセージを間違えた時
   - git commit --amend -m "書き直しメッセージ"
   - これで直前のcommitしたメッセージを変更できる
@@ -125,7 +115,7 @@
 
   _________
 
-### メモ(Golang)
+## メモ(Golang)
 - Go で int64 を int に変換するには int という関数を使う。
 
   ```
@@ -190,4 +180,58 @@ ______
 ### dockerメモ
 
 - リアルタイムでログを見る
+  
   - docker logs -f docker-id
+  
+- ##### 動いてるコンテナへの入り方
+
+  - $ docker exec -i -t コンテナ名 bash
+
+  ##### 動いているコンテナ内でのコマンドの実行
+
+  - $ docker exec -i  63b7de01ee21 /bin/bash -c "cd ./dbseedgo && ls"
+    - このようにすれば、コンテナ内のどこのディレクトリ内でもコマンドの実行ができる
+  
+- ##### mysql接続
+
+  - $ mysql -u root -p 
+  - $ mysql -h 127.0.0.1 -P 3306 -u root -p mysql ローカルからの入り方
+    - mysqlサーバーに入ってから　env　コマンドで環境変数確認
+    - $ show columns from TABLENAME; テーブル構成確認
+
+  - $ mysql -h db -P 3306 -u root -p 違うコンテナからの入りかた
+
+  #### 設定
+
+  - ~~mysql_docker/mysql/initdb 内のsqlファイルを初回のみ実行~~
+    - ↑migrationツールを入れるならば必要ない。
+  - ~~config.ymlにDBなどの設定を記入(追加したときはconfig.yml,conf.goにそれぞれ追加)~~
+    - ↑構造体に直接記入
+
+  ##### 二つの違いは？
+
+  - $ docker-compose build → imageの構築
+  - $ docker-compose up → image・コンテナの構築& コンテナの起動
+
+## API (インターン時のもの)
+
+
+- /users (GET)
+  - req : なし
+  - res : usersテーブルから全データを持ってくる(json)
+- /app (POST)
+  - userテーブルのnameを追加
+  - req : json("name")
+    - 例 {"name":"nmasanori"}
+  - res : json("uuid","name")
+- /nikkis (GET)
+  - req : なし
+  - res : nikkisテーブルから全データを持ってくる(json)
+- /nikkis (POST)
+  - req : json("UserId", "Date", "Title", "Content")
+  - res : json("Id", "UserId", "Date", "Title", "Content")
+
+
+
+
+
