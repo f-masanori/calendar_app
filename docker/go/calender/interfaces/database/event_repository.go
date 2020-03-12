@@ -28,7 +28,6 @@ func (repo *EventRepository) CreateEvent(uid string, date string, event string) 
 	}
 }
 
-//今は全部持って来てます
 func (repo *EventRepository) GetEventsByUID(UID string) (entities.Events, error) {
 	var events entities.Events
 	fmt.Println(UID)
