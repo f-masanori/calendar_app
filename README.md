@@ -101,7 +101,9 @@
   
 - commit を間違えた時
   
-  - git reset --hard HEAD^ で直前のcommitを削除
+  - git reset --hard HEAD~ で直前のcommitを削除
+  
+  - git reset --hard HEAD~2 で2個まえの ....
   
 -  commit のログ確認
 
@@ -111,6 +113,8 @@
 
   - git pull origin master
   
+- 
+
 - go modはいづれ導入したい
 
   _________
