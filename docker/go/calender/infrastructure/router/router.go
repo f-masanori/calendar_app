@@ -30,13 +30,14 @@ func Init() {
 	router := mux.NewRouter()
 	DBhandler := database.NewSqlHandler()
 	router.Use(CORS)
+	userHandler := handlers.NewUserHandler(DBhandler)
 	eventHandler := handlers.NewEventHandler(DBhandler)
 	router.HandleFunc("/addEvent", Authentication.AuthMiddleware(eventHandler.AddEvent))
 	router.HandleFunc("/getEventsByUID", Authentication.AuthMiddleware(eventHandler.GetEventsByUID))
+	router.HandleFunc("/registerUser", userHandler.NewUser)
 
 	/* 以下はカレンダーアプリでは使用していません */
 	nikkiHandler := handlers.NewNikkiHandler(DBhandler)
-	userHandler := handlers.NewUserHandler(DBhandler)
 	// platformHandler := handlers.NewPlatformHandler(DBhandler)
 	router.HandleFunc("/nikkis", nikkiHandler.Index).Methods("GET")
 	router.HandleFunc("/nikki", nikkiHandler.CreateNikki).Methods("POST")

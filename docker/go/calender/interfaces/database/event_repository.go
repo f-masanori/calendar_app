@@ -11,26 +11,38 @@ type EventRepository struct {
 	SqlHandler *database.SqlHandler
 }
 
-func (repo *EventRepository) CreateEvent(uid string, date string, event string) {
-	statement := "INSERT INTO events(uid,date,event) VALUES(?,?,?)"
+func (repo *EventRepository) CreateEvent(UID string, date string, event string) {
+	/* Event?Create?? */
+	fmt.Println("Event?Create process")
+	statement := "INSERT INTO events(uid,event_id,date,event) VALUES(?,?,?,?)"
 	stmtInsert, err := repo.SqlHandler.DB.Prepare(statement)
 	if err != nil {
-		fmt.Println("Prepare(statement) error")
-		// return nikki, err
+		log.Println("Prepare(statement) error")
 	}
 	defer stmtInsert.Close()
-
-	result, err := stmtInsert.Exec(uid, date, event)
+	log.Println(UID, date, event)
+	result, err := stmtInsert.Exec(UID, 10, date, event)
 	fmt.Println(result)
 	if err != nil {
-		fmt.Println("stmtInsert.Exec　error")
-		// return nikki, err
+		log.Println("stmtInsert.Exec error")
 	}
+	/*******/
+
+	/* NextEevntID????? */
+	fmt.Println("NextEevntID?Update process")
+	result2, err2 := repo.SqlHandler.DB.Exec("UPDATE next_event_ids SET next_event_id = next_event_id+1 WHERE uid = ?", UID)
+	if err2 != nil {
+		log.Println("NextEevntID????? repo.SqlHandler.DB.Exec error")
+		log.Fatal(err2)
+	}
+	fmt.Println(result2)
+	/*******/
 }
 
-func (repo *EventRepository) GetEventsByUID(UID string) (entities.Events, error) {
+func (repo *EventRepository) GetEventsByUID(UID string) (entities.Events, int, error) {
+	/* Event Read ?? */
 	var events entities.Events
-	fmt.Println(UID)
+	// fmt.Println(UID)
 	rows, err := repo.SqlHandler.DB.Query("SELECT * from events WHERE uid = ?;", UID)
 	if err != nil {
 		log.Print("error executing database query: ", err)
@@ -43,6 +55,7 @@ func (repo *EventRepository) GetEventsByUID(UID string) (entities.Events, error)
 		err := rows.Scan(
 			&events_table_colum.ID,
 			&events_table_colum.UID,
+			&events_table_colum.EventID,
 			&events_table_colum.Date,
 			&events_table_colum.Event,
 			&events_table_colum.CreatedAt,
@@ -53,10 +66,21 @@ func (repo *EventRepository) GetEventsByUID(UID string) (entities.Events, error)
 		}
 		event.ID = events_table_colum.ID
 		event.UID = events_table_colum.UID
+		event.EventID = events_table_colum.EventID
 		event.Date = events_table_colum.Date
 		event.Event = events_table_colum.Event
 
 		events = append(events, event)
 	}
-	return events, nil
+	/**************/
+
+	/* NextEventID Read ?? */
+	var _NextEventID int
+	if err := repo.SqlHandler.DB.QueryRow("SELECT next_event_id FROM next_event_ids WHERE uid = ?", UID).Scan(&_NextEventID); err != nil {
+		log.Fatal("NextEventID Read ??")
+		log.Fatal(err)
+	}
+	fmt.Println(_NextEventID)
+
+	return events, _NextEventID, nil
 }

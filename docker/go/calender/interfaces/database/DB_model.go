@@ -10,10 +10,19 @@ type Events_table struct {
 	ID        int    `db:"id"`
 	UID       string `db:"uid"`
 	Date      string `db:"date"`
+	EventID   int    `db:"event_id"`
 	Event     string `db:"event"`
 	CreatedAt string `db:"created_at"`
 	UpdatedAt string `db:"updated_at"`
 }
+type Next_event_id_table struct {
+	ID          int    `db:"id"`
+	UID         string `db:"uid"`
+	NextEventID int    `db:"next_event_id"`
+	CreatedAt   string `db:"created_at"`
+	UpdatedAt   string `db:"updated_at"`
+}
+
 type Nikkis_table struct {
 	ID             int    `db:"id"`
 	UserID         int    `db:"user_id"`

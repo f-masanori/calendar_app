@@ -3,15 +3,54 @@ package database
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
 	"go_docker/calender/entities"
 	"go_docker/calender/infrastructure/database"
 	"log"
 	"strconv"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type UserRepository struct {
 	SqlHandler *database.SqlHandler
+}
+
+func (repo *UserRepository) CreateUser(UID string, Email string) (entities.User, error) {
+	/* User Create process*/
+	var user entities.User
+	statement := "INSERT INTO users(uid) VALUES(?)"
+	stmtInsert, err := repo.SqlHandler.DB.Prepare(statement)
+	if err != nil {
+		fmt.Println("User Create process error")
+		return user, err
+	}
+	defer stmtInsert.Close()
+	result, err := stmtInsert.Exec(UID)
+	if err != nil {
+		fmt.Println("error2")
+		return user, err
+	}
+	lastInsertID, err := result.LastInsertId()
+	user.ID = int(lastInsertID)
+	user.Name = "name"
+	user.UID = "uid"
+	/* */
+
+	/* NextEventID Create Process */
+	statement2 := "INSERT INTO next_event_ids(uid,next_event_id) VALUES(?,?)"
+	stmtInsert2, err := repo.SqlHandler.DB.Prepare(statement2)
+	if err != nil {
+		fmt.Println("NextEventID Create Process error")
+		return user, err
+	}
+	defer stmtInsert2.Close()
+	res2, err := stmtInsert2.Exec(UID, 1)
+	if err != nil {
+		fmt.Println("error2")
+		fmt.Println(res2)
+		return user, err
+	}
+	return user, nil
 }
 
 func (repo *UserRepository) FindAll() (entities.Users, error) {
@@ -44,26 +83,6 @@ func (repo *UserRepository) FindAll() (entities.Users, error) {
 	}
 
 	return users, nil
-}
-
-func (repo *UserRepository) CreateUser(name string) (entities.User, error) {
-	var user entities.User
-	statement := "INSERT INTO users(name) VALUES(?)"
-	stmtInsert, err := repo.SqlHandler.DB.Prepare(statement)
-	if err != nil {
-		fmt.Println("error1")
-		return user, err
-	}
-	defer stmtInsert.Close()
-	result, err := stmtInsert.Exec(name)
-	if err != nil {
-		fmt.Println("error2")
-		return user, err
-	}
-	lastInsertID, err := result.LastInsertId()
-	user.ID = int(lastInsertID)
-	user.Name = name
-	return user, nil
 }
 
 func (repo *UserRepository) DeleteUser(id int) (int, error) {
