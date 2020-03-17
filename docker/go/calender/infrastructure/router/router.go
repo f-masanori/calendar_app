@@ -35,6 +35,8 @@ func Init() {
 	router.HandleFunc("/addEvent", Authentication.AuthMiddleware(eventHandler.AddEvent))
 	router.HandleFunc("/getEventsByUID", Authentication.AuthMiddleware(eventHandler.GetEventsByUID))
 	router.HandleFunc("/registerUser", userHandler.NewUser)
+	router.HandleFunc("/deleteEvent", Authentication.AuthMiddleware(eventHandler.DeleteEvent))
+	router.HandleFunc("/getNextEventID", Authentication.AuthMiddleware(eventHandler.GetNextEventID))
 
 	/* 以下はカレンダーアプリでは使用していません */
 	nikkiHandler := handlers.NewNikkiHandler(DBhandler)

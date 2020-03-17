@@ -11,7 +11,7 @@ type EventRepository struct {
 	SqlHandler *database.SqlHandler
 }
 
-func (repo *EventRepository) CreateEvent(UID string, date string, event string) {
+func (repo *EventRepository) CreateEvent(UID string, eventID int, date string, event string) {
 	/* Event?Create?? */
 	fmt.Println("Event?Create process")
 	statement := "INSERT INTO events(uid,event_id,date,event) VALUES(?,?,?,?)"
@@ -21,7 +21,7 @@ func (repo *EventRepository) CreateEvent(UID string, date string, event string) 
 	}
 	defer stmtInsert.Close()
 	log.Println(UID, date, event)
-	result, err := stmtInsert.Exec(UID, 10, date, event)
+	result, err := stmtInsert.Exec(UID, eventID, date, event)
 	fmt.Println(result)
 	if err != nil {
 		log.Println("stmtInsert.Exec error")
@@ -83,4 +83,40 @@ func (repo *EventRepository) GetEventsByUID(UID string) (entities.Events, int, e
 	fmt.Println(_NextEventID)
 
 	return events, _NextEventID, nil
+}
+
+func (repo *EventRepository) DeleteEvent(UID string, eventID int) {
+	stmtDelete, err := repo.SqlHandler.DB.Prepare("DELETE FROM events WHERE uid = ? and event_id = ?")
+	if err != nil {
+		log.Panicln("(repo *EventRepository) DeleteEvent error")
+		panic(err.Error())
+	}
+	defer stmtDelete.Close()
+
+	result, err := stmtDelete.Exec(UID, eventID)
+	if err != nil {
+		panic(err.Error())
+	}
+	_rowsAffect, err := result.RowsAffected()
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Println(_rowsAffect)
+	rowsAffect := int(_rowsAffect)
+	if rowsAffect == 0 {
+		fmt.Println("???????")
+	} else if rowsAffect == 1 {
+		fmt.Println("complete delete")
+	} else {
+		fmt.Println("DB table error") //??????2??????????
+	}
+}
+func (repo *EventRepository) GetNextEventID(UID string) int {
+	var _NextEventID int
+	if err := repo.SqlHandler.DB.QueryRow("SELECT next_event_id FROM next_event_ids WHERE uid = ?", UID).Scan(&_NextEventID); err != nil {
+		log.Fatal("NextEventID Read ??")
+		log.Fatal(err)
+	}
+	fmt.Println(_NextEventID)
+	return _NextEventID
 }
