@@ -1,7 +1,7 @@
 # calendar_app
 - もともと、インターン先で開発していた予定表アプリでしたが、サーバーレスになることが決定し自分の著作になりました。上司からのアドバイス等を頂きながら、１から自分で開発しました。現在はreactで開発しているカレンダーアプリの[サーバーサイド](https://github.com/f-masanori/calendar_react)として勉強のため開発を進めています
 - モバイルアプリを対象とした開発だったため、APIサーバーとして開発しています。
-- Docker上で開発をしており、クリーンアーキテクチャっぽい？アーキテクチャにしています。
+- Docker上で開発をしており、クリーンアーキテクチャっぽい？アーキテクチャにしました。(ネットの記事を読んだりしながら見様見真似でやってみたので正しいと言えるのかは不明)
 - DB(Mysql)もDocker上で動かしています。
 ## なぜ
 
@@ -21,12 +21,39 @@
   - port 8080: calendar app
   - port 3306: mySQL
 
+## API実装
 
+- /registerUser(POST)
+  - 説明 : SignInした際にユーザー初期登録としてのAPI
+  - req :  headers={ 'Content-Type': "application/json"}  ,body= json("UID","Email")
+  - res : (未実装[resに何が必要かを学んでから実装])
+- /addEvent(POST)
+  - 説明 : ユーザー別にEventを追加するAPI(jwt認証)
+  - req :headers: { 'Content-Type': "application/json",  'Authorization': idToken }, body= json("EventID", "Date", "InputEvent")
+  - res : (未実装[resに何が必要かを学んでから実装])
+- /getEventsByUID(GET)
+  - 説明 : ユーザー別に全てのEventsを取得
+- /deleteEvent(POST)
+  - 説明 : 指定されたEventを削除
+- /getNextEventID(GET)
+  - 説明 : ユーザーが次に作成するEventのIDを取得
 
-##  追加・改善したい要素
+##  追加・改善したいアイデア
 
-- eventの編集・削除のAPIを追加
 - slackと接続して通知させたい
+- Linebotから操作
+
+## 追加・改善したい実装
+
+- eventの編集・~~削除~~のAPIを追加
+
+- トランザクションの実装
+
+- DB設計を見直す(Eventのバックカラーなどが入るため)
+
+  ______
+
+- 現在、EventIDをクライアント側で管理しているが、EventをDB追加時にDB内のEventID情報を取得して追加でいい？
 
  ## これから勉強するところ
 
@@ -34,6 +61,25 @@
 - golangの詳しい仕様・標準ライブラリの詳しい仕様
   - DBの取扱いをもう少し詳しくなる
 - interface(よく理解しないまま使用してしまっている)
+
+
+
+## ハマった点などとその解決策
+
+- Golangでファイルを読み込む時、なぜか読み込めない
+  - docker開発していることを忘れてローカルでのパスを参照してしまっていた。
+  - docker内でのパスに変更→できた！
+- VPS上でDockerでmysqlサーバーを立ち上げ時DBに保存できない時がある(ローカルでは正しく動いた)
+  - 調べてみると、日本語が入っている場合だけ保存ができていない
+  - ぐぐるとどうやら、文字コードが関係しているらしい
+  - https://kitigai.hatenablog.com/entry/2019/03/03/203310を参考にして、VPSのMysqlコンテナ中に/tmp/dockerdir/custom.cnfを作成し、文字コードを設定
+  - DB作り直して再起動→できた！
+- クリーンアーキテクチャの記事を読んだりしたがほとんど理解できなかった
+  - 入門系の記事を参考にして写経して自分で実装してみると、なんとなくイメージが湧いてきた（習うより慣れろを実感）
+
+- firebase authenticationの鍵がパスの指定ミスでgitignoreに正しく追加されていない状態でリモートにpushしてしまった
+  - firebase authenticationのプロジェクトを新しくすることで対応
+  - 大事な鍵が入っているディレクトリでgitを扱うときは、リモートpushする前にgit stateなどで確認してミスを起こさないようにする
 
 ## DB 
 
@@ -80,23 +126,29 @@
     - migrationの実行状態確認
       - $ sql-migrate status
     
-    
 
-## アーキテクチャメモ
+## テスト[1つ以外未実装]
+
+##### 標準パッケージのtestingを使用する
+
+- Services(アプリケーションロジック)のテスト
+
+  1. dockerコンテナを立ち上げてexecとかで中に入る
+
+  2. go test -run Get とかでGetと名のつく関数のテストを実行
+
+     - ex)go test -run Get で func TestGetAllSuccessが実行
+
+       
+
+
+
+## メモ(アーキテクチャ)
 - クリーンアーキテクチャ使用(正しい構成なのかはわからない)
 
 - infrastructure/router で ルーティング
 - infrastructure/router の　userHandler := handlers.NewUserHandler(database.NewSqlHandler())　でuserHandlerの実体作成.userHandlerをレシーバーとするメソッドがそれぞれのハンドラー(コントローラ)
 
-
-## テスト
-##### 標準パッケージのtestingを使用する
-
--   Services(アプリケーションロジック)のテスト
-  1. dockerコンテナを立ち上げてexecとかで中に入る
-  2. go test -run Get とかでGetと名のつく関数のテストを実行
-    - ex)go test -run Get で func TestGetAllSuccessが実行
-    - 
 ## メモ(Git)
 - commit メッセージを間違えた時
   - git commit --amend -m "書き直しメッセージ"
@@ -172,20 +224,31 @@ ______
     fmt.Println(reflect.TypeOf(調べたい型)) 
     ```
   
-  
-  
-  
-  
-  _____
-  
-  
-  
+_____
+
+
 - docker上で開発する際にローカルのVScodeでコードの編集をしてもvscodeの拡張機能のフォーマッタが機能しないことがよくある
   
   - そのためターミナルで　gofmt -s -w ./ これでその配下にあるgoファイルを全て整形して保存してくれる
   - https://qiita.com/suin/items/9f9bdaa0cb9cb80cf752
 
-### dockerメモ
+### メモ(Linuxコマンド)
+
+- 名前の変更
+
+  - mv (旧ファイル名) (新ファイル名)
+
+- ディレクトリの削除（警告なし）
+
+  - rm -rf ()
+
+- ディレクトリの送信
+
+  - ```
+    scp -r -i ~/.ssh/id_rsa ./$(DIR) user@109.222.000.000:$(PASS)
+    ```
+
+### メモ(docker)
 
 - リアルタイムでログを見る
   
@@ -221,7 +284,14 @@ ______
   - $ docker-compose build → imageの構築
   - $ docker-compose up → image・コンテナの構築& コンテナの起動
 
-## API (インターン時のもの)
+### メモ(Mysql)
+
+- CREATE DATABASE app;
+- mysql> show databases; #データベース一覧を表示
+- 文字化けや日本語を保存できない時
+  - 文字セット？
+
+### API (インターン時のもの)
 
 
 - /users (GET)
