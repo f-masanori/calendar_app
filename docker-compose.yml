@@ -1,0 +1,27 @@
+version: '3.3'
+
+services:
+ 
+  db:
+    image: mysql
+    volumes:
+      - ./mysql/mysql_data:/var/lib/mysql # データの永続化
+      - ./mysql/initdb:/docker-entrypoint-initdb.d # 初期化
+    environment:
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: mysql
+    ports:
+      - "3306:3306"
+    container_name: mysql_container # go コンテナからの接続時に使用
+  golang:
+    build: ./golang
+    ports:
+        - "8080:8080"
+    container_name: golang
+    volumes:
+        - ./golang:/go/src/golang
+        # - ./github.com:/go/src/github.com
+    depends_on:
+        - db
+
+
