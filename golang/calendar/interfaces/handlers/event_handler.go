@@ -104,3 +104,30 @@ func (e *EventHandler) GetNextEventID(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(jsonResponse)
 }
+func (e *EventHandler) EditEvent(w http.ResponseWriter, r *http.Request) {
+	type Request struct {
+		EventID int `json:"EventID,string"`
+		// Date       string `json:"Date"`
+		InputEvent      string `json:"InputEvent"`
+		BackgroundColor string `json:"BackgroundColor"`
+		BorderColor     string `json:"BorderColor"`
+		TextColor       string `json:"TextColor"`
+	}
+	decoder := json.NewDecoder(r.Body)
+	// fmt.Println(decoder)
+	request := new(Request)
+	err := decoder.Decode(&request)
+	if err != nil {
+		panic(err)
+	}
+	log.Println(request)
+
+	e.Service.EditEvent(
+		Authentication.FirebaseUID,
+		request.EventID,
+		request.InputEvent,
+		request.BackgroundColor,
+		request.BorderColor,
+		request.TextColor)
+
+}

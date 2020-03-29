@@ -14,14 +14,14 @@ type EventRepository struct {
 func (repo *EventRepository) CreateEvent(UID string, eventID int, date string, event string) {
 	/* Event?Create?? */
 	fmt.Println("Event?Create process")
-	statement := "INSERT INTO events(uid,event_id,date,event) VALUES(?,?,?,?)"
+	statement := "INSERT INTO events(uid,event_id,date,event,background_color,border_color,text_color) VALUES(?,?,?,?,?,?,?)"
 	stmtInsert, err := repo.SqlHandler.DB.Prepare(statement)
 	if err != nil {
 		log.Println("Prepare(statement) error")
 	}
 	defer stmtInsert.Close()
 	log.Println(UID, date, event)
-	result, err := stmtInsert.Exec(UID, eventID, date, event)
+	result, err := stmtInsert.Exec(UID, eventID, date, event, "skyblue", "skyblue", "skyblue")
 	fmt.Println(result)
 	if err != nil {
 		log.Println("stmtInsert.Exec error")
@@ -58,6 +58,9 @@ func (repo *EventRepository) GetEventsByUID(UID string) (entities.Events, int, e
 			&events_table_colum.EventID,
 			&events_table_colum.Date,
 			&events_table_colum.Event,
+			&events_table_colum.BackgroundColor,
+			&events_table_colum.BorderColor,
+			&events_table_colum.TextColor,
 			&events_table_colum.CreatedAt,
 			&events_table_colum.UpdatedAt)
 		if err != nil {
@@ -69,7 +72,9 @@ func (repo *EventRepository) GetEventsByUID(UID string) (entities.Events, int, e
 		event.EventID = events_table_colum.EventID
 		event.Date = events_table_colum.Date
 		event.Event = events_table_colum.Event
-
+		event.BackgroundColor = events_table_colum.BackgroundColor
+		event.BorderColor = events_table_colum.BorderColor
+		event.TextColor = events_table_colum.TextColor
 		events = append(events, event)
 	}
 	/**************/
@@ -119,4 +124,21 @@ func (repo *EventRepository) GetNextEventID(UID string) int {
 	}
 	fmt.Println(_NextEventID)
 	return _NextEventID
+}
+func (repo *EventRepository) EditEvent(
+	UID string,
+	EventID int,
+	InputEvent string,
+	BackgroundColor string,
+	BorderColor string,
+	TextColor string) {
+	fmt.Println("EventEdit process")
+	statement := "UPDATE events set event = ?,background_color = ?,border_color = ?,text_color = ? where uid = ? and event_id = ? "
+	stmtInsert, err := repo.SqlHandler.DB.Prepare(statement)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmtInsert.Close()
+
+	stmtInsert.Exec(InputEvent, BackgroundColor, BorderColor, TextColor, UID, EventID)
 }

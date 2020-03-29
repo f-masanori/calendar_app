@@ -16,7 +16,7 @@ var FirebaseUID string
 func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		opt := option.WithCredentialsFile("/go/src/go_docker/calendarapp-dcbd5-firebase-adminsdk-9fhv7-acb24a0067.json")
+		opt := option.WithCredentialsFile("/go/src/golang/calendarapp-dcbd5-firebase-adminsdk-9fhv7-acb24a0067.json")
 		// fmt.Print(opt)
 		app, err := firebase.NewApp(context.Background(), nil, opt)
 		if err != nil {

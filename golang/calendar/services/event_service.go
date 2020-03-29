@@ -10,6 +10,7 @@ type EventRepository interface {
 	GetEventsByUID(string) (entities.Events, int, error)
 	DeleteEvent(string, int)
 	GetNextEventID(string) int
+	EditEvent(string, int, string, string, string, string)
 }
 type EventService struct {
 	EventRepository EventRepository
@@ -41,17 +42,19 @@ func (e *EventService) GetEventsByUID(uid string) (entities.Events, int) {
 	// fmt.Println(nikki)
 	// return nikki, err
 }
-func (e *EventService) DeleteEvent(uid string, eventID int) {
-
-	e.EventRepository.DeleteEvent(uid, eventID)
-
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// fmt.Println(nikki)
-	// return nikki, err
+func (e *EventService) DeleteEvent(UID string, eventID int) {
+	e.EventRepository.DeleteEvent(UID, eventID)
 }
-func (e *EventService) GetNextEventID(uid string) int {
-	NextEventID := e.EventRepository.GetNextEventID(uid)
+func (e *EventService) GetNextEventID(UID string) int {
+	NextEventID := e.EventRepository.GetNextEventID(UID)
 	return NextEventID
+}
+func (e *EventService) EditEvent(
+	UID string,
+	EventID int,
+	InputEvent string,
+	BackgroundColor string,
+	BorderColor string,
+	TextColor string) {
+	e.EventRepository.EditEvent(UID, EventID, InputEvent, BackgroundColor, BorderColor, TextColor)
 }

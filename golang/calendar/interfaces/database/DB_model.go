@@ -7,13 +7,16 @@ type Users_table struct {
 	UpdatedAt string `db:"updated_at"`
 }
 type Events_table struct {
-	ID        int    `db:"id"`
-	UID       string `db:"uid"`
-	Date      string `db:"date"`
-	EventID   int    `db:"event_id"`
-	Event     string `db:"event"`
-	CreatedAt string `db:"created_at"`
-	UpdatedAt string `db:"updated_at"`
+	ID              int    `db:"id"`
+	UID             string `db:"uid"`
+	Date            string `db:"date"`
+	EventID         int    `db:"event_id"`
+	Event           string `db:"event"`
+	BackgroundColor string `db:"background_color"`
+	BorderColor     string `db:"border_color"`
+	TextColor       string `db:"text_color"`
+	CreatedAt       string `db:"created_at"`
+	UpdatedAt       string `db:"updated_at"`
 }
 type Next_event_id_table struct {
 	ID          int    `db:"id"`

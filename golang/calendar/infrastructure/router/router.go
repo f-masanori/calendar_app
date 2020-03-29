@@ -38,6 +38,7 @@ func Init() {
 	router.HandleFunc("/getEventsByUID", Authentication.AuthMiddleware(eventHandler.GetEventsByUID))
 	router.HandleFunc("/registerUser", userHandler.NewUser)
 	router.HandleFunc("/deleteEvent", Authentication.AuthMiddleware(eventHandler.DeleteEvent))
+	router.HandleFunc("/editEvent", Authentication.AuthMiddleware(eventHandler.EditEvent))
 	router.HandleFunc("/getNextEventID", Authentication.AuthMiddleware(eventHandler.GetNextEventID))
 
 	/* 以下はカレンダーアプリでは使用していません */
