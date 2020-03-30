@@ -21,7 +21,7 @@ func (repo *EventRepository) CreateEvent(UID string, eventID int, date string, e
 	}
 	defer stmtInsert.Close()
 	log.Println(UID, date, event)
-	result, err := stmtInsert.Exec(UID, eventID, date, event, "skyblue", "skyblue", "skyblue")
+	result, err := stmtInsert.Exec(UID, eventID, date, event, "skyblue", "skyblue", "black")
 	fmt.Println(result)
 	if err != nil {
 		log.Println("stmtInsert.Exec error")
