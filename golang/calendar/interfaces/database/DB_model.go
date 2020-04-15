@@ -46,3 +46,11 @@ type Photos_table struct {
 	CreatedAt string `db:"created_at"`
 	UpdatedAt string `db:"updated_at"`
 }
+type Todos_table struct {
+	ID        int    `db:"id"`
+	UID       string `db:"uid"`
+	TodoID    int    `db:"todo_id"`
+	Todo      string `db:"todo"`
+	CreatedAt string `db:"created_at"`
+	UpdatedAt string `db:"updated_at"`
+}

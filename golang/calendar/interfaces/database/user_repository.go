@@ -50,6 +50,22 @@ func (repo *UserRepository) CreateUser(UID string, Email string) (entities.User,
 		fmt.Println(res2)
 		return user, err
 	}
+
+	/* NextTodoID Create Process */
+	statement3 := "INSERT INTO next_todo_ids(uid,next_todo_id) VALUES(?,?)"
+	stmtInsert3, err := repo.SqlHandler.DB.Prepare(statement3)
+	if err != nil {
+		fmt.Println("NextTodoID Create Process error")
+		return user, err
+	}
+	defer stmtInsert2.Close()
+	res3, err := stmtInsert3.Exec(UID, 1)
+	if err != nil {
+		fmt.Println("error3")
+		fmt.Println(res3)
+		return user, err
+	}
+
 	return user, nil
 }
 

@@ -15,6 +15,7 @@ import (
 // CORS対応 Middleware
 func CORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("CORS")
 		w.Header().Set("Access-Control-Allow-Headers", "*")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
@@ -34,12 +35,22 @@ func Init() {
 	router.Use(CORS)
 	userHandler := handlers.NewUserHandler(DBhandler)
 	eventHandler := handlers.NewEventHandler(DBhandler)
+	allInOneHandler := handlers.NewAllInOneHandler(DBhandler)
+	todoHandler := handlers.NewTodoHandler(DBhandler)
+
 	router.HandleFunc("/addEvent", Authentication.AuthMiddleware(eventHandler.AddEvent))
 	router.HandleFunc("/getEventsByUID", Authentication.AuthMiddleware(eventHandler.GetEventsByUID))
 	router.HandleFunc("/registerUser", userHandler.NewUser)
 	router.HandleFunc("/deleteEvent", Authentication.AuthMiddleware(eventHandler.DeleteEvent))
 	router.HandleFunc("/editEvent", Authentication.AuthMiddleware(eventHandler.EditEvent))
 	router.HandleFunc("/getNextEventID", Authentication.AuthMiddleware(eventHandler.GetNextEventID))
+
+	router.HandleFunc("/addScript", Authentication.AuthMiddleware(allInOneHandler.AddScript))
+
+	router.HandleFunc("/addTodo", Authentication.AuthMiddleware(todoHandler.AddTodo))
+	router.HandleFunc("/deleteTodo", Authentication.AuthMiddleware(todoHandler.DeleteTodo))
+
+	router.HandleFunc("/getTodosByUID", Authentication.AuthMiddleware(todoHandler.GetTodosByUID))
 
 	/* 以下はカレンダーアプリでは使用していません */
 	// nikkiHandler := handlers.NewNikkiHandler(DBhandler)
