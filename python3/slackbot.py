@@ -11,6 +11,8 @@ MySQLConfig = {
     'database': 'app',
 }
 email = "test05051@test.com"
+WEB_HOOK_URL = config.webhookURL
+
 def getTodayStr():
     _today = datetime.date.today()
     print(_today)
@@ -36,7 +38,7 @@ def main():
     cursor.close()
     connection.close()
     # if event != "":
-    #     WEB_HOOK_URL = config.webhookURL
+    #     
     #     requests.post(WEB_HOOK_URL, data=json.dumps({
     #     'text': event,  # 通知内容
     #     'username': 'Bakira-Tech-Python-Bot',  # ユーザー名
