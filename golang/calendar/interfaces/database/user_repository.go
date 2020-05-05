@@ -18,14 +18,14 @@ type UserRepository struct {
 func (repo *UserRepository) CreateUser(UID string, Email string) (entities.User, error) {
 	/* User Create process*/
 	var user entities.User
-	statement := "INSERT INTO users(uid) VALUES(?)"
+	statement := "INSERT INTO users(uid,email) VALUES(?,?)"
 	stmtInsert, err := repo.SqlHandler.DB.Prepare(statement)
 	if err != nil {
 		fmt.Println("User Create process error")
 		return user, err
 	}
 	defer stmtInsert.Close()
-	result, err := stmtInsert.Exec(UID)
+	result, err := stmtInsert.Exec(UID, Email)
 	if err != nil {
 		fmt.Println("error2")
 		return user, err
