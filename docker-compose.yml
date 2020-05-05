@@ -9,7 +9,7 @@ services:
       - ./mysql/initdb:/docker-entrypoint-initdb.d # 初期化
     environment:
       MYSQL_USER: root
-      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} # .envファイルに記載すること
     ports:
       - "3306:3306"
     container_name: mysql_container # go コンテナからの接続時に使用
@@ -21,6 +21,17 @@ services:
     volumes:
         - ./golang:/go/src/golang
         # - ./github.com:/go/src/github.com
+    depends_on:
+        - db
+  python3:
+    restart: always
+    build: ./python3
+    container_name: 'python3'
+    working_dir: '/root/dev/'
+    # ttyがtrueだとコンテナを起動させ続けれる
+    tty: true
+    volumes: 
+        - ./python3:/root/dev/
     depends_on:
         - db
 
