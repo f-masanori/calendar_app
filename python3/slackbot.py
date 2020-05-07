@@ -4,6 +4,8 @@ import requests
 import json
 import mysql_conn
 import datetime
+import schedule
+import time
 MySQLConfig = {
     'host': config.host,
     'user': config.user,
@@ -37,14 +39,22 @@ def main():
     # DB操作が終わったらカーソルとコネクションを閉じる
     cursor.close()
     connection.close()
-    # if event != "":
-    #     
-    #     requests.post(WEB_HOOK_URL, data=json.dumps({
-    #     'text': event,  # 通知内容
-    #     'username': 'Bakira-Tech-Python-Bot',  # ユーザー名
-    #     'icon_emoji': ':smile_cat:',  # アイコン
-    #     'link_names': 1,  # 名前をリンク化
-    #     }))
-main()
+    if event != "":   
+        requests.post(WEB_HOOK_URL, data=json.dumps({
+        'text': event,  # 通知内容
+        'username': 'Bakira-Tech-Python-Bot',  # ユーザー名
+        'icon_emoji': ':smile_cat:',  # アイコン
+        'link_names': 1,  # 名前をリンク化
+        }))
+
+
+def job():
+    main()
+
+#AM11:00のjob実行を登録
+schedule.every().day.at("20:00").do(job)
+while True:
+    schedule.run_pending()
+    time.sleep(1)
 
 
