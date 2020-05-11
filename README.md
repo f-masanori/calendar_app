@@ -3,6 +3,7 @@
 - モバイルアプリを対象とした開発だったため、APIサーバーとして開発しています。
 - Docker上で開発をしており、クリーンアーキテクチャっぽい？アーキテクチャにしました。(ネットの記事を読んだりしながら見様見真似でやってみたので正しいと言えるのかは不明)
 - DB(Mysql)もDocker上で動かしています。
+## ブランチ
 ## なぜ
 
 - なぜgolangか
@@ -45,11 +46,13 @@
 
 ## 追加・改善したい実装
 
-- eventの編集・~~削除~~のAPIを追加
+- ~~eventの編集・削除のAPIを追加~~
 
 - トランザクションの実装
 
-- DB設計を見直す(Eventのバックカラーなどが入るため)
+- ~~DB設計を見直す(Eventのバックカラーなどが入るため)~~
+
+- ヘッダにログインメールアドレス記載
 
   ______
 
@@ -174,21 +177,30 @@
 
   - git pull origin master
   
-- 
+-  git: ローカルをリモートブランチで上書き
 
-- go modはいづれ導入したい
+  現状のローカルの状態はいらない時
+
+  ```
+$ git fetch origin
+  $ git reset --hard origin/ブランチ名(masterとかmasa-devとか)
+  ```
+
+  
+  
+- ~~go modはいづれ導入したい~~した
 
   _________
 
 ## メモ(Golang)
 - Go で int64 を int に変換するには int という関数を使う。
 
-  ```
+```
   b = int(a)
-  ```
+```
 
   これで int64 の a を値そのままで int 型の b に変換できる。
-  
+
 - 構造体に&(アドレス演算子）を使って初期化したり、newキーワードを使用すると**ポインタ型**で受け取ることができます。(関数の返しの時などの型に注意する)
 
 ______
@@ -211,13 +223,14 @@ ______
     i, _ = strconv.Atoi(s)
     fmt.Println(i) // -> 123
     ```
-    
+```
+
   - ```
     var i int=321
     var s string
     s = strconv.Itoa(i)
     fmt.Println(s) // -> "123"
-    ```
+```
 
 ______
 
@@ -291,30 +304,25 @@ _____
 
 ### メモ(Mysql)
 
-- CREATE DATABASE app;
+- mysql> CREATE DATABASE app; # DB作成
 - mysql> show databases; #データベース一覧を表示
 - 文字化けや日本語を保存できない時
-  - 文字セット？
+  - 文字セット？に問題あり？
 
-### API (インターン時のもの)
+### メモ(JWTとは)
 
+- JWT (Json Web Token)
+- Tokenとはユーザーを識別するための認証情報。つまりJWTとは、JavaScriptのオブジェクトの形をした認証情報のことです。（https://techblog.roxx.co.jp/entry/2019/03/13/135739）
+- JWT のメリット
+  - 電子署名(勉強する)
+- JWTの構成
+  - JWTは大きく3つの要素で構成される。
+    - ヘッダー
+    - クレーム情報
+    - 署名
 
-- /users (GET)
-  - req : なし
-  - res : usersテーブルから全データを持ってくる(json)
-- /app (POST)
-  - userテーブルのnameを追加
-  - req : json("name")
-    - 例 {"name":"nmasanori"}
-  - res : json("uuid","name")
-- /nikkis (GET)
-  - req : なし
-  - res : nikkisテーブルから全データを持ってくる(json)
-- /nikkis (POST)
-  - req : json("UserId", "Date", "Title", "Content")
-  - res : json("Id", "UserId", "Date", "Title", "Content")
+### メモ(Base64とは)
 
-
-
-
+- base64とは、64進数を意味する言葉で、すべてのデータをアルファベット(`a~z`, `A~z`)と数字(`0~9`)、一部の記号(`+`,`/`)の**64文字**で表すエンコード方式(https://qiita.com/PlanetMeron/items/2905e2d0aa7fe46a36d4)
+- 
 
